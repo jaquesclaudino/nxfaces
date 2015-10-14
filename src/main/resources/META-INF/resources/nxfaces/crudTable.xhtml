@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="mb" required="true" type="com.nexten.nxfaces.crud.AbstractSelectableCRUD"/>
+        <cc:attribute name="updateRowSelect" default="@form" type="String"/>
+        <cc:attribute name="rows" default="20" type="Integer"/>
+        <cc:attribute name="rowStyleClass"/>
+        <cc:attribute name="globalFilter" default="true" type="Boolean"/>
+        <cc:attribute name="widgetVar" default="dataTable" type="String"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>  
+        <p:dataTable id="table" value="#{cc.attrs.mb.dataModel}" var="item" widgetVar="#{cc.attrs.widgetVar}"
+                     selectionMode="single" selection="#{cc.attrs.mb.selected}"  
+                     paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom" 
+                     rows="#{cc.attrs.rows}" lazy="true" rowsPerPageTemplate="5,10,20,50" rowStyleClass="#{cc.attrs.rowStyleClass}"
+                     emptyMessage="#{msg.NenhumRegistro}"
+                     rendered="#{!cc.attrs.mb.visible}">
+
+            <f:facet name="header">
+                <p:outputPanel id="panelGlobalFilter" style="text-align: left;">
+                    <p:commandButton value="#{msg.Novo}" action="#{cc.attrs.mb.create}" update="@form" process="@this" 
+                                     style="color: white; background-color: green; border-color: green; background: -webkit-gradient(linear, left top, left bottom, from(limegreen), to(green)) repeat-X; background: -moz-linear-gradient(270deg, limegreen, green);"/> 
+
+                    <p:inputText id="globalFilter" 
+                                 onkeyup="PF('#{cc.attrs.widgetVar}').filter()" 
+                                 onkeypress="if (event.keyCode === 13) {return false;}"
+                                 rendered="#{cc.attrs.globalFilter}" 
+                                 placeholder="#{msg.DigiteParaPesquisar}"
+                                 style="margin-left: 5px;"/>
+                </p:outputPanel>
+            </f:facet>            
+
+            <cc:insertFacet name="header"/>
+
+            <p:ajax event="rowSelect" update="#{cc.attrs.updateRowSelect}"/>  
+
+            <!-- COLUMN -->
+            <cc:insertChildren/>
+        </p:dataTable>
+    </cc:implementation>
+</html>

@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="host" default="" type="String"/>     
+        <cc:attribute name="contextPath" default="" type="String"/>     
+        <cc:attribute name="name" type="String" required="true"/>
+          
+        <cc:attribute name="action" method-signature="void action()"/>
+        <cc:attribute name="update" type="String"/>
+        <cc:attribute name="log" default="null" type="String"/>
+        <cc:attribute name="showLog" default="true" type="Boolean"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:form>
+            <p:remoteCommand name="onwebsocketmessage" action="#{cc.attrs.action}" process="@this" update="#{cc.attrs.update}"/>
+        </h:form>
+            
+        <h:outputScript name="js/nxwebsocket.js"/>
+        <script>
+            new NxWebSocket(
+                    '#{cc.attrs.host}',
+                    '#{cc.attrs.contextPath}',
+                    '#{cc.attrs.name}', 
+                    #{cc.attrs.log}, 
+                    #{cc.attrs.showLog}, 
+                    function(message) {
+                        onwebsocketmessage([{name:'websocketmessage',value: message}]);
+                    });
+        </script>
+    </cc:implementation>
+    
+    <!--
+    Para recuperar a mensagem do websocket no managed bean:
+      Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+      System.out.println(params.get("websocketmessage"));
+    -->
+</html>

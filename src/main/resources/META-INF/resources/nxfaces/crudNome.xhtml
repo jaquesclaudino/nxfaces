@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:n="http://xmlns.jcp.org/jsf/composite/nxfaces">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="header" required="true" type="String"/>
+        <cc:attribute name="mb" required="true" type="com.nexten.nxfaces.crud.AbstractNomeCRUD"/>
+        <cc:attribute name="globalFilter" default="true" type="Boolean"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:form id="form">
+            <!-- DIALOG -->
+            <n:crudDialog id="crudDialog" header="#{cc.attrs.header}" mb="#{cc.attrs.mb}">
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="nome" value="#{msg.Nome}"/>
+                    <p:inputText id="nome" value="#{cc.attrs.mb.entity.nome}" required="true"/>
+                </h:panelGrid>
+            </n:crudDialog>
+                        
+            <!-- TABLE -->
+            <n:crudTable mb="#{cc.attrs.mb}" globalFilter="#{cc.attrs.globalFilter}">
+                <p:column headerText="#{msg.Nome}">
+                    #{item.nome}
+                </p:column>
+            </n:crudTable>
+        </h:form>
+    </cc:implementation>
+</html>

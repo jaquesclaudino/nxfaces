@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="header" required="true" type="String"/>
+        <cc:attribute name="mb" required="true" type="com.nexten.nxfaces.crud.AbstractSelectableCRUD"/>
+        <cc:attribute name="updateSalvar" default="" type="String"/>
+        <cc:attribute name="renderedVoltar" default="true" type="Boolean"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <p:growl id="growl" showDetail="true"/>
+        
+        <p:panel id="dialog" rendered="#{cc.attrs.mb.visible}">           
+            <p:messages/>
+
+            <!-- PANELGRID -->
+            <cc:insertChildren/>
+
+            <br/>
+            
+            <p:commandButton id="salvar" value="#{msg.Salvar}" action="#{cc.attrs.mb.save}" update="@form #{cc.attrs.updateSalvar}" 
+                             style="color: white; background-color: green; border-color: green; background: -webkit-gradient(linear, left top, left bottom, from(limegreen), to(green)) repeat-X; background: -moz-linear-gradient(270deg, limegreen, green);"/> 
+            
+            <p:commandButton value="#{msg.Excluir}" action="#{cc.attrs.mb.deleteSelected}" update="@form" immediate="true" 
+                             disabled="#{cc.attrs.mb.selected == null || cc.attrs.mb.selected.id == null}" 
+                             onclick="return confirm('#{msg.ConfirmaExclusao}');"
+                             rendered="#{cc.attrs.mb.entity.id != null}"/>        
+
+            <p:commandLink id="cancelar" value="#{msg.Voltar}" action="#{cc.attrs.mb.cancel}" update="@form" process="@this" style="margin-left: 5px;" rendered="#{cc.attrs.renderedVoltar}"/>
+
+            <p:defaultCommand target="salvar"/>                         
+            <p:hotkey bind="esc" update="@form" actionListener="#{cc.attrs.mb.cancel}" process="@this"/>
+            <p:focus context="dialog"/>
+        </p:panel>            
+    </cc:implementation>
+</html>
