@@ -69,7 +69,7 @@ public abstract class AbstractCRUD<T extends Entity> implements Serializable {
         try {
             RequestContext.getCurrentInstance().reset("form");
         } catch (Exception ex) {
-            LOG.log(Level.WARNING, "Error on reset id form. Not found?", ex);
+            LOG.log(Level.WARNING, "Error on reset form", ex);
         }
     }
     
