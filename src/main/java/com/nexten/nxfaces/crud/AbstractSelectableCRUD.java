@@ -49,7 +49,6 @@ public abstract class AbstractSelectableCRUD<T extends Entity> extends AbstractC
         this.selected = selected;
         
         if (selected != null) {
-            LOG.info(selected.toString());
             editSelected();
         }
         

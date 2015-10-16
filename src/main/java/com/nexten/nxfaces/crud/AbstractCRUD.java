@@ -26,6 +26,7 @@ public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     private List<T> listAll;
     private DataModel<T> dataModel;
     protected boolean visible = false;
+    private String globalFilter;
  
     public abstract AbstractDAO<T> getDAO();
     
@@ -103,6 +104,14 @@ public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     //chamado ao fechar o dialog:
     public void handleClose(CloseEvent event) {  
         visible = false; 
+    }
+
+    public String getGlobalFilter() {
+        return globalFilter;
+    }
+
+    public void setGlobalFilter(String globalFilter) {
+        this.globalFilter = globalFilter;
     }
     
 }
