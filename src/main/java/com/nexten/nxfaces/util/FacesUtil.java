@@ -4,7 +4,16 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import javax.el.ELContext;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
+import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.visit.VisitCallback;
+import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitResult;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -63,5 +72,34 @@ public class FacesUtil {
         
         return uri.toASCIIString();
     }    
+    
+    public static ValueExpression createValueExpression(String expression) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        Application app = facesContext.getApplication();
+        ExpressionFactory elFactory = app.getExpressionFactory();
+        ELContext elContext = facesContext.getELContext();
+        ValueExpression valueExp = elFactory.createValueExpression(elContext, expression, Object.class);
+        return valueExp;
+    }
+    
+    public static UIComponent findComponent(final String id) {
+        FacesContext context = FacesContext.getCurrentInstance(); 
+        UIViewRoot root = context.getViewRoot();
+        VisitContext visitContext = VisitContext.createVisitContext(context);
+        final UIComponent[] found = new UIComponent[1];
+
+        root.visitTree(visitContext, new VisitCallback() {     
+            @Override
+            public VisitResult visit(VisitContext context, UIComponent component) {
+                if(component.getId().equals(id)){
+                    found[0] = component;
+                    return VisitResult.COMPLETE;
+                }
+                return VisitResult.ACCEPT;              
+            }
+        });
+
+        return found[0];
+    }
     
 }

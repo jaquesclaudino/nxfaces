@@ -32,10 +32,12 @@
                              onclick="return confirm('#{msg.ConfirmaExclusao}');"
                              rendered="#{cc.attrs.mb.entity.id != null}"/>        
 
-            <p:commandLink id="cancelar" value="#{msg.Voltar}" action="#{cc.attrs.mb.cancel}" update="@form" process="@this" style="margin-left: 5px;" rendered="#{cc.attrs.renderedVoltar}"/>
+            <p:commandLink id="cancelar" value="#{msg.Voltar}" action="#{cc.attrs.mb.cancel}" 
+                           update="@form" immediate="#{empty cc.attrs.mb.entity.id}"
+                           style="margin-left: 5px;" rendered="#{cc.attrs.renderedVoltar}"/>
 
             <p:defaultCommand target="salvar"/>                         
-            <p:hotkey bind="esc" update="@form" actionListener="#{cc.attrs.mb.cancel}" process="@this"/>
+            <p:hotkey bind="esc" actionListener="#{cc.attrs.mb.cancel}" update="@form" immediate="#{empty cc.attrs.mb.entity.id}"/>
             <p:focus context="dialog"/>
         </p:panel>            
     </cc:implementation>

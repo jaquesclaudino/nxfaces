@@ -29,6 +29,10 @@ public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     private String globalFilter;
  
     public abstract AbstractDAO<T> getDAO();
+
+    public AbstractCRUD() {
+        LOG.setLevel(Level.ALL);
+    }
     
     public boolean isVisible() {
         return visible;
@@ -66,6 +70,7 @@ public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     }
     
     public void cancel() {
+        LOG.fine("canceling form");
         visible = false;
         try {
             RequestContext.getCurrentInstance().reset("form");
