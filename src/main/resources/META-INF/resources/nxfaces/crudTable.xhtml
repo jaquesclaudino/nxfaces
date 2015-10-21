@@ -17,35 +17,41 @@
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
-    <cc:implementation>  
+    <cc:implementation>
+        <!--Atencao: PF(widgetvar) nao funcionará se adicionar um panelGroup rendered=false aqui.-->
+        
+        <p:toolbar id="#{cc.attrs.id}Toolbar" style="margin-bottom: 0.5em" rendered="#{not cc.attrs.mb.editing}">
+            <f:facet name="left">
+                <p:commandButton value="#{msg.Novo}" action="#{cc.attrs.mb.create}" update="@form" process="@this" 
+                                 style="color: white; background-color: green; border-color: green; background: -webkit-gradient(linear, left top, left bottom, from(limegreen), to(green)) repeat-X; background: -moz-linear-gradient(270deg, limegreen, green);"/>
+            </f:facet>
+        </p:toolbar>
+
         <p:dataTable id="table" value="#{cc.attrs.mb.dataModel}" var="item" widgetVar="#{cc.attrs.widgetVar}"
                      selectionMode="single" selection="#{cc.attrs.mb.selected}"  
                      paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom" 
                      rows="#{cc.attrs.rows}" lazy="true" rowsPerPageTemplate="5,10,20,50" rowStyleClass="#{cc.attrs.rowStyleClass}"
                      emptyMessage="#{msg.NenhumRegistro}"
-                     rendered="#{!cc.attrs.mb.visible}">
+                     rendered="#{not cc.attrs.mb.editing}">
 
             <f:facet name="header">
-                <p:outputPanel id="panelGlobalFilter" style="text-align: left;">
-                    <p:commandButton value="#{msg.Novo}" action="#{cc.attrs.mb.create}" update="@form" process="@this" 
-                                     style="color: white; background-color: green; border-color: green; background: -webkit-gradient(linear, left top, left bottom, from(limegreen), to(green)) repeat-X; background: -moz-linear-gradient(270deg, limegreen, green);"/> 
-
-                    <p:inputText id="globalFilter" 
-                                 value="#{cc.attrs.mb.globalFilter}"
-                                 onkeyup="PF('#{cc.attrs.widgetVar}').filter()" 
-                                 onkeypress="if (event.keyCode === 13) {return false;}"
-                                 rendered="#{cc.attrs.globalFilter}" 
-                                 placeholder="#{msg.DigiteParaPesquisar}"
-                                 style="margin-left: 5px;"/>
-                </p:outputPanel>
-            </f:facet>            
-
-            <cc:insertFacet name="header"/>
+                <p:inputText id="globalFilter" 
+                             value="#{cc.attrs.mb.globalFilter}"
+                             onkeyup="PF('#{cc.attrs.widgetVar}').filter()" 
+                             onkeypress="if (event.keyCode === 13) {return false;}"
+                             rendered="#{cc.attrs.globalFilter}" 
+                             placeholder="#{msg.DigiteParaPesquisar}"
+                             style="margin-left: 5px;"/>
+            </f:facet>
 
             <p:ajax event="rowSelect" update="#{cc.attrs.updateRowSelect}"/>  
 
             <!-- COLUMN -->
             <cc:insertChildren/>
         </p:dataTable>
+            
+        <h:panelGroup rendered="#{not cc.attrs.mb.editing}">
+            <p:sticky target="#{cc.attrs.id}Toolbar"/>        
+        </h:panelGroup>
     </cc:implementation>
 </html>

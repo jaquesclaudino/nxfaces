@@ -17,9 +17,9 @@
     <cc:implementation>
         <p:growl id="growl" showDetail="true"/>
         
-        <p:dialog id="dialog" header="#{cc.attrs.header}" visible="#{cc.attrs.mb.visible}" closeOnEscape="true" width="#{cc.attrs.width}">
+        <p:dialog id="#{cc.attrs.id}Content" header="#{cc.attrs.header}" visible="#{cc.attrs.mb.editing}" closeOnEscape="true" width="#{cc.attrs.width}">
             <p:ajax event="close" listener="#{cc.attrs.mb.handleClose}"/>
-            <p:focus context="dialog"/>
+            <p:focus context="#{cc.attrs.id}Content"/>
             <p:messages/>
             
             <!-- PANELGRID -->

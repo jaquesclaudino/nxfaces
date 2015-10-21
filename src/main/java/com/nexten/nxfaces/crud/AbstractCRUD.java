@@ -25,7 +25,7 @@ public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     protected T entity;    
     private List<T> listAll;
     private DataModel<T> dataModel;
-    protected boolean visible = false;
+    protected boolean editing = false;
     private String globalFilter;
  
     public abstract AbstractDAO<T> getDAO();
@@ -33,13 +33,13 @@ public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     public AbstractCRUD() {
         LOG.setLevel(Level.ALL);
     }
-    
-    public boolean isVisible() {
-        return visible;
+
+    public boolean isEditing() {
+        return editing;
     }
 
-    public void setVisible(boolean visible) {
-        this.visible = visible;
+    public void setEditing(boolean editing) {
+        this.editing = editing;
     }
 
     public T getEntity() {
@@ -56,7 +56,7 @@ public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     public void save() {
         entity = getDAO().save(entity);
         listAll = null;
-        visible = false;
+        editing = false;
     }
     
     public void delete(T entity) {
@@ -66,12 +66,12 @@ public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     
     public void edit(T entity) {
         this.entity = entity;
-        this.visible = true;
+        this.editing = true;
     }
     
     public void cancel() {
         LOG.fine("canceling form");
-        visible = false;
+        editing = false;
         try {
             RequestContext.getCurrentInstance().reset("form");
         } catch (Exception ex) {
@@ -108,7 +108,7 @@ public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     
     //chamado ao fechar o dialog:
     public void handleClose(CloseEvent event) {  
-        visible = false; 
+        editing = false; 
     }
 
     public String getGlobalFilter() {

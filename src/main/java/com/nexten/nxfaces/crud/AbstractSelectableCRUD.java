@@ -38,7 +38,7 @@ public abstract class AbstractSelectableCRUD<T extends Entity> extends AbstractC
     public void deleteSelected() {
         delete(selected);
         clearList();
-        visible = false;
+        editing = false;
     }
     
     public T getSelected() {
