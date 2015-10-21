@@ -48,6 +48,10 @@ public class DateUtil {
         return (int) ((fim.getTime() - inicio.getTime()) / 1000 / 60);
     }
     
+    public static int getSecondsBetween(Date inicio, Date fim) {
+        return (int) ((fim.getTime() - inicio.getTime()) / 1000);
+    }
+    
     public static boolean isWeekend(Date date) {
         calendar.setTime(date);
         return calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ||
