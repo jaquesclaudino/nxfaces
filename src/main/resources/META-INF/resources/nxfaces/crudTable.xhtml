@@ -40,8 +40,7 @@
                              onkeyup="PF('#{cc.attrs.widgetVar}').filter()" 
                              onkeypress="if (event.keyCode === 13) {return false;}"
                              rendered="#{cc.attrs.globalFilter}" 
-                             placeholder="#{msg.DigiteParaPesquisar}"
-                             style="margin-left: 5px;"/>
+                             placeholder="#{msg.DigiteParaPesquisar}"/>
             </f:facet>
 
             <p:ajax event="rowSelect" update="#{cc.attrs.updateRowSelect}"/>  
