@@ -19,13 +19,6 @@
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         <!--Atencao: PF(widgetvar) nao funcionará se adicionar um panelGroup rendered=false aqui.-->
-        
-        <p:toolbar id="#{cc.attrs.id}Toolbar" style="margin-bottom: 0.5em" rendered="#{not cc.attrs.mb.editing}">
-            <f:facet name="left">
-                <p:commandButton value="#{msg.Novo}" action="#{cc.attrs.mb.create}" update="@form" process="@this" 
-                                 style="color: white; background-color: green; border-color: green; background: -webkit-gradient(linear, left top, left bottom, from(limegreen), to(green)) repeat-X; background: -moz-linear-gradient(270deg, limegreen, green);"/>
-            </f:facet>
-        </p:toolbar>
 
         <p:dataTable id="table" value="#{cc.attrs.mb.dataModel}" var="item" widgetVar="#{cc.attrs.widgetVar}"
                      selectionMode="single" selection="#{cc.attrs.mb.selected}"  
@@ -48,9 +41,5 @@
             <!-- COLUMN -->
             <cc:insertChildren/>
         </p:dataTable>
-            
-        <h:panelGroup rendered="#{not cc.attrs.mb.editing}">
-            <p:sticky target="#{cc.attrs.id}Toolbar"/>        
-        </h:panelGroup>
     </cc:implementation>
 </html>

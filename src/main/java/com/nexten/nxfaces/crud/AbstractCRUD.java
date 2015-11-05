@@ -82,6 +82,7 @@ public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     public void clearList() {
         listAll = null;
         dataModel = null;
+        editing = false;
     }
     
     public List<T> getListAll() {

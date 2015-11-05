@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:nxfaces="http://xmlns.jcp.org/jsf/composite/nxfaces">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="mb" required="true" type="com.nexten.nxfaces.crud.AbstractSelectableCRUD"/>
+        <cc:attribute name="updateSalvar" default="" type="String"/>
+        <cc:attribute name="renderedVoltar" default="true" type="Boolean"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>        
+        <p:toolbar id="#{cc.attrs.id}Toolbar" style="margin-bottom: 0.5em">
+            <f:facet name="left">
+                <nxfaces:crudToolbarButtons mb="#{cc.attrs.mb}" updateSalvar="#{cc.attrs.updateSalvar}" renderedVoltar="#{cc.attrs.renderedVoltar}"/> 
+            </f:facet>
+        </p:toolbar>
+        
+        <p:sticky target="#{cc.attrs.id}Toolbar"/>
+    </cc:implementation>
+</html>

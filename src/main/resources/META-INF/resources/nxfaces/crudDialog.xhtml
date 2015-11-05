@@ -26,8 +26,8 @@
             <cc:insertChildren/>
 
             <p:separator rendered="#{cc.attrs.separatorRendered}"/>
-            <!--< p:defaultCommand target="salvar"/>-->                    
-            <p:commandButton id="salvar" value="#{msg.Salvar}" action="#{cc.attrs.mb.save}" update="@form #{cc.attrs.updateSalvar}"/> 
+            <p:defaultCommand target="salvarDialog" rendered="#{cc.attrs.mb.editing}"/>                    
+            <p:commandButton id="salvarDialog" value="#{msg.Salvar}" action="#{cc.attrs.mb.save}" update="@form #{cc.attrs.updateSalvar}"/> 
             <!--ajax="false"-->
             <p:commandButton id="cancelar" value="#{msg.Cancelar}" action="#{cc.attrs.mb.cancel}" update="@form" process="@this"/>
         </p:dialog>

@@ -4,7 +4,7 @@
     <name>nxfaces</name>
     <groupId>com.nexten</groupId>
     <artifactId>nxfaces</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <packaging>jar</packaging>
     
     <properties>
