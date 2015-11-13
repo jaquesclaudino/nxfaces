@@ -131,6 +131,15 @@ public class CriteriaGetter<T> {
         };
     }
     
+    public OrderGetter getOrderAttributeDesc(final String attributeName) {
+        return new OrderGetter() {
+            @Override
+            public List getListOrder(CriteriaQuery query, CriteriaBuilder builder, Root root) {          
+                return Arrays.asList(builder.desc(root.get(attributeName)));
+            }
+        };
+    }
+    
     //---------- path
     
     public Path getAttribute(Root root, String attributeName) {
