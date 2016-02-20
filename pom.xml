@@ -4,7 +4,7 @@
     <name>nxfaces</name>
     <groupId>com.nexten</groupId>
     <artifactId>nxfaces</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <packaging>jar</packaging>
     
     <properties>
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
-            <version>5.2</version>
+            <version>5.3</version>
         </dependency>
     </dependencies>
     
