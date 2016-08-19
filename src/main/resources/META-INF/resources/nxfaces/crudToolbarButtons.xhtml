@@ -10,6 +10,7 @@
         <cc:attribute name="mb" required="true" type="com.nexten.nxfaces.crud.AbstractSelectableCRUD"/>
         <cc:attribute name="updateSalvar" default="" type="String"/>
         <cc:attribute name="renderedVoltar" default="true" type="Boolean"/>
+        <cc:attribute name="renderedExcluir" default="true" type="Boolean"/>
         <cc:attribute name="renderedDefaultCommand" default="true" type="Boolean"/>
     </cc:interface>
 
@@ -18,7 +19,9 @@
         <h:panelGroup rendered="#{cc.attrs.mb.editing and cc.attrs.renderedVoltar}">
             <p:commandLink id="cancelar" value="#{msg.Voltar}" action="#{cc.attrs.mb.cancel}" 
                        update="@form" immediate="#{empty cc.attrs.mb.entity.id}"
-                       style="margin-left: 5px; font-weight: normal"/>
+                       style="margin-left: 5px; font-weight: normal">
+                <p:resetInput target="@form" />
+            </p:commandLink>
             
             <span class="ui-separator">
                 <span class="ui-icon ui-icon-grip-dotted-vertical" />
@@ -36,7 +39,9 @@
         <p:commandButton value="#{msg.Excluir}" action="#{cc.attrs.mb.deleteSelected}" update="@form" immediate="true" 
                          disabled="#{cc.attrs.mb.selected == null || cc.attrs.mb.selected.id == null}" 
                          onclick="return confirm('#{msg.ConfirmaExclusao}');"
-                         rendered="#{cc.attrs.mb.editing and cc.attrs.mb.entity.id != null}"/>        
+                         rendered="#{cc.attrs.renderedExcluir and cc.attrs.mb.editing and cc.attrs.mb.entity.id != null}">
+            <p:resetInput target="@form" />
+        </p:commandButton>
         
         <p:defaultCommand target="salvar" rendered="#{cc.attrs.mb.editing and cc.attrs.renderedDefaultCommand}"/>
     </cc:implementation>

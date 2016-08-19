@@ -33,11 +33,14 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
     private final AbstractDAO<T> dao;
     private final PredicateGetter predicateGetter;
     private final OrderGetter orderGetter;
+    private final List<String> globalFilterAttributeNames;
     
-    public EntityLazyDataModel(AbstractDAO<T> dao, PredicateGetter predicateGetter, OrderGetter orderGetter) {
+    public EntityLazyDataModel(AbstractDAO<T> dao, PredicateGetter predicateGetter, OrderGetter orderGetter,
+            List<String> globalFilterAttributeNames) {
         this.dao = dao;
         this.predicateGetter = predicateGetter;
         this.orderGetter = orderGetter;
+        this.globalFilterAttributeNames = globalFilterAttributeNames;
         this.setRowCount(dao.findCount(predicateGetter).intValue());
         LOG.setLevel(Level.ALL);
     }
@@ -66,25 +69,20 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
                 CriteriaGetter criteria = dao.getCriteriaGetter();
                 
                 //predicados do filtro do dataTable:
-                Predicate predicateFilter = null;                
+                Predicate predicateFilter = null;  
+                Predicate globalFilter = null;
                 for (Entry<String,Object> entry : filters.entrySet()) {
-                    String attributeName = entry.getKey();
-                    if (attributeName.equals(GLOBAL_FILTER)) {
-                        attributeName = "nome"; //TODO: adicionar listGlobalFilterAttribute
-                    }                    
-                    
-                    //extrai todo o caminho. Ex: usuario.empresa.nome
-                    Path path = criteria.getAttribute(root, attributeName);
-                    
-                    Predicate predicate;
-                    if (entry.getValue() instanceof String) {
-                        predicate = criteria.like(builder, path, (String) entry.getValue());
+                    if (entry.getKey().equals(GLOBAL_FILTER)) {
+                        for (String attributeName : globalFilterAttributeNames) {
+                            Predicate p = createPredicate(builder, root, attributeName, entry.getValue());                            
+                            globalFilter = criteria.orNotNull(builder, globalFilter, p);
+                        }
                     } else {
-                        predicate = builder.equal(path, entry.getValue());
+                        Predicate p = createPredicate(builder, root, entry.getKey(), entry.getValue());
+                        predicateFilter = criteria.andNotNull(builder, predicateFilter, p);
                     }
-                    
-                    predicateFilter = criteria.andNotNull(builder, predicateFilter, predicate);
                 }                
+                predicateFilter = criteria.andNotNull(builder, predicateFilter, globalFilter);
                                
                 //predicados customizados nos managedBeans. TODO: substituir por lista?
                 Predicate predicateCustom = null;
@@ -95,6 +93,22 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
                 return criteria.andNotNull(builder, predicateFilter, predicateCustom);
             }
         };
+    }
+    
+    private Predicate createPredicate(CriteriaBuilder builder, Root root, String attributeName, Object value) {
+        CriteriaGetter criteria = dao.getCriteriaGetter();
+        
+        //extrai todo o caminho. Ex: usuario.empresa.nome
+        Path path = criteria.getAttribute(root, attributeName);
+
+        Predicate predicate;
+        if (value instanceof String) {
+            predicate = criteria.like(builder, path, (String) value);
+        } else {
+            predicate = builder.equal(path, value);
+        }
+
+        return predicate;
     }
     
 }

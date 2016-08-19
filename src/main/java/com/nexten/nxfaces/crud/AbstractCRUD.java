@@ -6,11 +6,11 @@ import com.nexten.nxfaces.dao.CriteriaGetter.OrderGetter;
 import com.nexten.nxfaces.dao.CriteriaGetter.PredicateGetter;
 import com.nexten.nxfaces.model.entity.Entity;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.model.DataModel;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 
 /**
@@ -21,6 +21,7 @@ import org.primefaces.event.CloseEvent;
 public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     
     private static final Logger LOG = Logger.getLogger(AbstractCRUD.class.getName());
+    private static final List<String> DEFAULT_GLOBAL_FILTER_ATTRIBUTE_NAMES = Arrays.asList("nome");
     
     protected T entity;    
     private List<T> listAll;
@@ -70,13 +71,7 @@ public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     }
     
     public void cancel() {
-        LOG.fine("canceling form");
         editing = false;
-        try {
-            RequestContext.getCurrentInstance().reset("form");
-        } catch (Exception ex) {
-            LOG.log(Level.WARNING, "Error on reset form", ex);
-        }
     }
     
     public void clearList() {
@@ -94,7 +89,7 @@ public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     
     public DataModel<T> getDataModel() {        
         if (dataModel == null) {
-            dataModel = new EntityLazyDataModel<>(getDAO(), getPredicateGetter(), getOrderGetter());
+            dataModel = new EntityLazyDataModel<>(getDAO(), getPredicateGetter(), getOrderGetter(), getGlobalFilterAttributeNames());
         }
         return dataModel;
     }
@@ -105,6 +100,10 @@ public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     
     protected OrderGetter getOrderGetter() {
         return null; //reimplementar nas subclasses. Ex: return new String[] {"id"};
+    }
+    
+    protected List<String> getGlobalFilterAttributeNames() {
+        return DEFAULT_GLOBAL_FILTER_ATTRIBUTE_NAMES;
     }
     
     //chamado ao fechar o dialog:
