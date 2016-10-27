@@ -5,6 +5,7 @@ import com.nexten.nxfaces.dao.CriteriaGetter.PredicateGetter;
 import com.nexten.nxfaces.dao.CriteriaGetter.SelectionGetter;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -23,6 +24,10 @@ import javax.persistence.criteria.Root;
 public abstract class AbstractDAO<T> {
 
     private static final Logger LOG = Logger.getLogger(AbstractDAO.class.getName());
+    
+    static {
+        LOG.setLevel(Level.ALL);
+    }
 
     @PersistenceContext
     private EntityManager em;
@@ -45,7 +50,7 @@ public abstract class AbstractDAO<T> {
         try {
             return getEntityClass().newInstance();
         } catch (InstantiationException | IllegalAccessException ex) {
-            LOG.severe(ex.toString());
+            LOG.log(Level.SEVERE, "Error on createEntity", ex);
             return null;
         }
     }
@@ -160,8 +165,8 @@ public abstract class AbstractDAO<T> {
                     .createQuery(createCriteriaQuery(predicateGetter, orderGetter))
                     .setMaxResults(1)
                     .getSingleResult();
-        } catch (NoResultException e) {
-            LOG.warning(e.toString());
+        } catch (NoResultException ex) {
+            LOG.log(Level.FINEST, "No result found", ex);
             return null;
         }
     }
