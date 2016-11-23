@@ -7,6 +7,7 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -21,7 +22,8 @@ public class HtmlHandler extends Handler {
     private final ClassLoader contextClassLoader; // to not share the handler between different web applications   
     private final List<String> list = Collections.synchronizedList(new ArrayList<>());
     private int maxLines = DEFAULT_MAX_LINES;
-        
+    private String filterRegex;    
+    
     private HtmlHandler(ClassLoader contextClassLoader) {
         this.contextClassLoader = contextClassLoader;
     }
@@ -55,10 +57,15 @@ public class HtmlHandler extends Handler {
     public void publish(LogRecord record) {
         if (Thread.currentThread().getContextClassLoader().equals(contextClassLoader)) {
             if (getLevel() == null || record.getLevel().intValue() >= getLevel().intValue()) {
-                while (list.size() > maxLines) {
-                    list.remove(list.size()-1);
-                }        
-                list.add(0,getFormatter().format(record));
+                synchronized(this) {
+                    while (list.size() > maxLines) {
+                        list.remove(list.size()-1);
+                    }
+                    String line = getFormatter().format(record);
+                    if (filterRegex == null || Pattern.matches(filterRegex, line)) {
+                        list.add(0, line);
+                    }
+                }
             }
         }
     }
@@ -81,7 +88,7 @@ public class HtmlHandler extends Handler {
         }
     }
     
-    public String getAsHtml() {
+    public synchronized String getAsHtml() {
         StringBuilder sb = new StringBuilder();
         for (String line : list) {
             sb.append(line);        
@@ -99,6 +106,10 @@ public class HtmlHandler extends Handler {
 
     public ClassLoader getContextClassLoader() {
         return contextClassLoader;
+    }
+
+    public void setFilterRegex(String filterRegex) {
+        this.filterRegex = filterRegex;
     }
     
 }
