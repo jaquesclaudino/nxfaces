@@ -21,7 +21,7 @@ import org.primefaces.event.CloseEvent;
 public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     
     private static final Logger LOG = Logger.getLogger(AbstractCRUD.class.getName());
-    private static final List<String> DEFAULT_GLOBAL_FILTER_ATTRIBUTE_NAMES = Arrays.asList("nome");
+    private static final List<String> DEFAULT_GLOBAL_FILTER_ATTRIBUTE_NAMES = Arrays.asList("name");
     
     protected T entity;    
     private List<T> listAll;

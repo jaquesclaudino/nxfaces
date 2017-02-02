@@ -9,23 +9,23 @@ function NxWebSocket(host, contextPath, websocketName, log, showLog, onmessage) 
 
     ws = createWebSocket();
     ws.onopen = function(evt) {
-        addLog('Conectado');
-        //ws.send("teste cliente conectado")
+        addLog('Connected');
+        //ws.send("test client connected")
     };
 
     ws.onclose = function(evt) {
-        addLog('Desconectado');
+        addLog('Disconnected');
     };
 
     ws.onmessage = function(evt) {
-        addLog('Recebido: ' + evt.data);
+        addLog('Received: ' + evt.data);
         if (onmessage !== null) {
             onmessage(evt.data);
         }
     };
 
     ws.onerror = function(evt) {
-        addLog('Erro: ' + evt.data);
+        addLog('Error: ' + evt.data);
     };
 
     function createWebSocket() {
@@ -50,7 +50,7 @@ function NxWebSocket(host, contextPath, websocketName, log, showLog, onmessage) 
         } else if ('MozWebSocket' in window) {
             return new MozWebSocket(url);
         } else {
-            addLog('Não é suportado neste navegador.');
+            addLog('Browser not supported.');
             return null;
         }
     }

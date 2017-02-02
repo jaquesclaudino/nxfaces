@@ -19,6 +19,8 @@ import javax.persistence.criteria.Selection;
  */
 public class CriteriaGetter<T> {
     
+    public enum DateFilterType {BEGIN_OR_END, BEGIN, END};
+    
     public interface SelectionGetter<T> {
         Selection getSelection(CriteriaQuery<T> query, CriteriaBuilder builder, Root<T> root);
     }
@@ -100,22 +102,15 @@ public class CriteriaGetter<T> {
             return null;
         }
     }
-    
-    /**
-     *
-     * @param filtroData
-     *   0 = inicio OU fim
-     *   1 = inicio
-     *   2 = fim
-     */
-    public Predicate betweenData(CriteriaBuilder builder, Root root, String atributeNameInicio, Date inicio, String attributeNameFim, Date fim, int filtroData) {
-        switch (filtroData) {
-            case 1: return builder.between(root.get(atributeNameInicio), inicio, fim);
-            case 2: return builder.between(root.get(attributeNameFim), inicio, fim);
-            default:
-                return builder.or( //inicio OU fim
-                    builder.between(root.get(atributeNameInicio), inicio, fim),
-                    builder.between(root.get(attributeNameFim), inicio, fim)
+
+    public Predicate betweenDate(CriteriaBuilder builder, Root root, String attributeNameBegin, Date begin, String attributeNameEnd, Date end, DateFilterType dateFilterType) {
+        switch (dateFilterType) {
+            case BEGIN: return builder.between(root.get(attributeNameBegin), begin, end);
+            case END: return builder.between(root.get(attributeNameEnd), begin, end);
+            default: //BEGIN_OR_END:
+                return builder.or( 
+                    builder.between(root.get(attributeNameBegin), begin, end),
+                    builder.between(root.get(attributeNameEnd), begin, end)
                 );
         }  
     }
@@ -143,7 +138,7 @@ public class CriteriaGetter<T> {
     //---------- path
     
     public Path getAttribute(Root root, String attributeName) {
-        if (attributeName.contains(".")) { //ex: empresa.nome
+        if (attributeName.contains(".")) { //ex: company.name
             Path path = root;
             for (String name : attributeName.split("\\.")) {
                 path = path.get(name);

@@ -77,7 +77,7 @@ public abstract class AbstractDAO<T> {
      * @param fieldClass
      * @return 
      */
-    //TODO: É possível extrair fieldClass de <F> ?
+    //TODO: how to extract fieldClass of <F> ?
     protected <F> CriteriaQuery<F> createCriteriaQuery(SelectionGetter selectionGetter, PredicateGetter predicateGetter, OrderGetter orderGetter, Class fieldClass) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<F> query = builder.createQuery(fieldClass);
@@ -174,11 +174,5 @@ public abstract class AbstractDAO<T> {
     public T findFirst() {
         return findFirst(null, null);
     }
-    
-    /*public Integer getNewSequenceValue(String sequence) {
-        return ((Long) getEntityManager()
-                .createNativeQuery(String.format("select nextval('%s')", sequence))
-                .getSingleResult()).intValue();
-    }*/
 
 }

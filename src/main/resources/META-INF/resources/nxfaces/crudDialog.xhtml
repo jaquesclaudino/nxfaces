@@ -27,9 +27,9 @@
 
             <p:separator rendered="#{cc.attrs.separatorRendered}"/>
             <p:defaultCommand target="salvarDialog" rendered="#{cc.attrs.mb.editing}"/>                    
-            <p:commandButton id="salvarDialog" value="#{msg.Salvar}" action="#{cc.attrs.mb.save}" update="@form #{cc.attrs.updateSalvar}"/> 
+            <p:commandButton id="salvarDialog" value="#{b.Save}" action="#{cc.attrs.mb.save}" update="@form #{cc.attrs.updateSalvar}"/> 
             <!--ajax="false"-->
-            <p:commandButton id="cancelar" value="#{msg.Cancelar}" action="#{cc.attrs.mb.cancel}" update="@form" process="@this"/>
+            <p:commandButton id="cancelar" value="#{b.Cancel}" action="#{cc.attrs.mb.cancel}" update="@form" process="@this"/>
         </p:dialog>
     </cc:implementation>
 </html>

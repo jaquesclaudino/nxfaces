@@ -17,7 +17,7 @@
     <!-- IMPLEMENTATION -->
     <cc:implementation> 
         <h:panelGroup rendered="#{cc.attrs.mb.editing and cc.attrs.renderedVoltar}">
-            <p:commandLink id="cancelar" value="#{msg.Voltar}" action="#{cc.attrs.mb.cancel}" 
+            <p:commandLink id="cancelar" value="#{b.Back}" action="#{cc.attrs.mb.cancel}" 
                        update="@form" immediate="#{empty cc.attrs.mb.entity.id}"
                        style="margin-left: 5px; font-weight: normal">
                 <p:resetInput target="@form" />
@@ -28,17 +28,17 @@
             </span>
         </h:panelGroup>
         
-        <p:commandButton value="#{msg.Novo}" action="#{cc.attrs.mb.create}" update="@form" process="@this" 
+        <p:commandButton value="#{b.New}" action="#{cc.attrs.mb.create}" update="@form" process="@this" 
                          rendered="#{not cc.attrs.mb.editing}"
                          style="color: white; background-color: green; border-color: green; background: -webkit-gradient(linear, left top, left bottom, from(limegreen), to(green)) repeat-X; background: -moz-linear-gradient(270deg, limegreen, green);"/>
 
-        <p:commandButton id="salvar" value="#{msg.Salvar}" action="#{cc.attrs.mb.save}" update="@form #{cc.attrs.updateSalvar}" 
+        <p:commandButton id="salvar" value="#{b.Save}" action="#{cc.attrs.mb.save}" update="@form #{cc.attrs.updateSalvar}" 
                          rendered="#{cc.attrs.mb.editing}"
                          style="color: white; background-color: green; border-color: green; background: -webkit-gradient(linear, left top, left bottom, from(limegreen), to(green)) repeat-X; background: -moz-linear-gradient(270deg, limegreen, green);"/> 
 
-        <p:commandButton value="#{msg.Excluir}" action="#{cc.attrs.mb.deleteSelected}" update="@form" immediate="true" 
+        <p:commandButton value="#{b.Delete}" action="#{cc.attrs.mb.deleteSelected}" update="@form" immediate="true" 
                          disabled="#{cc.attrs.mb.selected == null || cc.attrs.mb.selected.id == null}" 
-                         onclick="return confirm('#{msg.ConfirmaExclusao}');"
+                         onclick="return confirm('#{b.ConfirmExclusion}');"
                          rendered="#{cc.attrs.renderedExcluir and cc.attrs.mb.editing and cc.attrs.mb.entity.id != null}">
             <p:resetInput target="@form" />
         </p:commandButton>

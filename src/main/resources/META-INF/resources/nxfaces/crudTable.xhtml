@@ -23,7 +23,7 @@
                      selectionMode="single" selection="#{cc.attrs.mb.selected}"  
                      paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom" 
                      rows="#{cc.attrs.rows}" lazy="true" rowsPerPageTemplate="5,10,20,50" rowStyleClass="#{cc.attrs.rowStyleClass}"
-                     emptyMessage="#{msg.NenhumRegistro}"
+                     emptyMessage="#{b.NoRecords}"
                      rendered="#{not cc.attrs.mb.editing}">
 
             <f:facet name="header">
@@ -32,7 +32,7 @@
                              onkeyup="PF('#{cc.attrs.widgetVar}').filter()" 
                              onkeypress="if (event.keyCode === 13) {return false;}"
                              rendered="#{cc.attrs.globalFilter}" 
-                             placeholder="#{msg.DigiteParaPesquisar}"/>
+                             placeholder="#{b.TypeToSearch}"/>
             </f:facet>
 
             <p:ajax event="rowSelect" update="#{cc.attrs.updateRowSelect}"/>  

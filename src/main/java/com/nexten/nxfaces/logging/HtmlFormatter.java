@@ -94,7 +94,7 @@ public class HtmlFormatter extends Formatter {
         } else if (thrownMessage != null) {
             message = thrownMessage;
         } else if (message == null) {
-            message = "Desconhecido";
+            message = "Unknown";
         }
         return message;
     }

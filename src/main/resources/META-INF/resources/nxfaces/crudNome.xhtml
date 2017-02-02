@@ -9,7 +9,7 @@
     <!-- INTERFACE -->
     <cc:interface>
         <cc:attribute name="header" required="true" type="String"/>
-        <cc:attribute name="mb" required="true" type="com.nexten.nxfaces.crud.AbstractNomeCRUD"/>
+        <cc:attribute name="mb" required="true" type="com.nexten.nxfaces.crud.AbstractSelectableCRUD"/>
         <cc:attribute name="globalFilter" default="true" type="Boolean"/>
     </cc:interface>
 
@@ -19,15 +19,15 @@
             <!-- DIALOG -->
             <n:crudDialog id="crudDialog" header="#{cc.attrs.header}" mb="#{cc.attrs.mb}">
                 <h:panelGrid columns="2">
-                    <p:outputLabel for="nome" value="#{msg.Nome}"/>
-                    <p:inputText id="nome" value="#{cc.attrs.mb.entity.nome}" required="true"/>
+                    <p:outputLabel for="name" value="#{b.Name}"/>
+                    <p:inputText id="name" value="#{cc.attrs.mb.entity.name}" required="true"/>
                 </h:panelGrid>
             </n:crudDialog>
                         
             <!-- TABLE -->
             <n:crudTable mb="#{cc.attrs.mb}" globalFilter="#{cc.attrs.globalFilter}">
-                <p:column headerText="#{msg.Nome}">
-                    #{item.nome}
+                <p:column headerText="#{b.Name}">
+                    #{item.name}
                 </p:column>
             </n:crudTable>
         </h:form>

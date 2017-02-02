@@ -1,7 +1,6 @@
 package com.nexten.nxfaces.crud;
 
 import com.nexten.nxfaces.model.entity.Entity;
-import java.util.logging.Logger;
 
 /**
  *
@@ -9,8 +8,6 @@ import java.util.logging.Logger;
  * @param <T>
  */
 public abstract class AbstractSelectableCRUD<T extends Entity> extends AbstractCRUD<T> {
-    
-    private static final Logger LOG = Logger.getLogger(AbstractSelectableCRUD.class.getName());
     
     public interface SelectListener<T> {
         void onSelect(T selected);

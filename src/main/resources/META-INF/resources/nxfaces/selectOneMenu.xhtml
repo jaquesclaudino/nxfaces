@@ -2,8 +2,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:cc="http://java.sun.com/jsf/composite"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
@@ -11,7 +9,7 @@
     <cc:interface>
         <cc:attribute name="value" required="true" type="com.nexten.nxfaces.model.entity.Entity"/>        
         <cc:attribute name="items" required="true" type="java.util.List"/>
-        <cc:attribute name="firstItem" default="#{msg.Selecione}" type="String"/>
+        <cc:attribute name="firstItem" default="#{b.Select}" type="String"/>
         <cc:attribute name="required" default="false" type="Boolean"/>
     </cc:interface>
 
@@ -19,7 +17,7 @@
     <cc:implementation>
         <p:selectOneMenu id="select" value="#{cc.attrs.value}" converter="#{entityConverter}" required="#{cc.attrs.required}">
             <f:selectItem itemLabel="#{cc.attrs.firstItem}"/>
-            <f:selectItems value="#{cc.attrs.items}" var="item" itemLabel="#{item.nome}" itemValue="#{item}"/>
+            <f:selectItems value="#{cc.attrs.items}" var="item" itemLabel="#{item.name}" itemValue="#{item}"/>
         </p:selectOneMenu>            
     </cc:implementation>
 </html>

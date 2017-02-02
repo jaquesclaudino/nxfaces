@@ -57,7 +57,7 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
     
     @Override  
     public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {        
-        LOG.log(Level.FINE, "first={0} | pageSize={1} | sortField={2} | sortOrder={3} | filters={4}", new Object[] {first, pageSize, sortField, sortOrder, filters});
+        LOG.log(Level.FINEST, "first={0} | pageSize={1} | sortField={2} | sortOrder={3} | filters={4}", new Object[] {first, pageSize, sortField, sortOrder, filters});
                 
         return dao.findAll(getPredicateGetter(filters), orderGetter, first, pageSize);
     }
@@ -84,7 +84,6 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
                 }                
                 predicateFilter = criteria.andNotNull(builder, predicateFilter, globalFilter);
                                
-                //predicados customizados nos managedBeans. TODO: substituir por lista?
                 Predicate predicateCustom = null;
                 if (predicateGetter != null) {
                     predicateCustom = predicateGetter.getPredicate(query, builder, root);
@@ -98,7 +97,7 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
     private Predicate createPredicate(CriteriaBuilder builder, Root root, String attributeName, Object value) {
         CriteriaGetter criteria = dao.getCriteriaGetter();
         
-        //extrai todo o caminho. Ex: usuario.empresa.nome
+        //extract the path. e.g: user.company.name
         Path path = criteria.getAttribute(root, attributeName);
 
         Predicate predicate;
