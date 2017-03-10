@@ -94,20 +94,42 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
         };
     }
     
-    private Predicate createPredicate(CriteriaBuilder builder, Root root, String attributeName, Object value) {
+    private Predicate createPredicate(CriteriaBuilder builder, Root root, String attributeName, Object value) {       
         CriteriaGetter criteria = dao.getCriteriaGetter();
         
         //extract the path. e.g: user.company.name
         Path path = criteria.getAttribute(root, attributeName);
 
-        Predicate predicate;
-        if (value instanceof String) {
+        Predicate predicate = null;
+        
+        if (path.getJavaType().equals(String.class)) {
             predicate = criteria.like(builder, path, (String) value);
         } else {
-            predicate = builder.equal(path, value);
+            value = tryParse(path.getJavaType(), (String) value);
+            if (value != null) {
+                predicate = builder.equal(path, value);
+            }
         }
 
         return predicate;
+    }
+    
+    private Object tryParse(Class clazz, String value) {
+        try {
+            if (value != null && !value.isEmpty()) {
+                if (clazz.equals(Integer.class) || clazz.equals(int.class)) {
+                    return Integer.parseInt(value);
+
+                } else if (clazz.equals(Long.class) || clazz.equals(long.class)) {
+                    return Long.parseLong(value);
+
+                } else if (clazz.equals(Double.class) || clazz.equals(double.class)) {
+                    return Double.parseDouble(value);
+                }
+            }
+        } catch (NumberFormatException ex) {
+        }
+        return null;
     }
     
 }
