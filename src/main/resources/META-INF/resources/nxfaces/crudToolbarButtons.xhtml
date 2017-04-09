@@ -8,15 +8,17 @@
     <!-- INTERFACE -->
     <cc:interface>
         <cc:attribute name="mb" required="true" type="com.nexten.nxfaces.crud.AbstractSelectableCRUD"/>
-        <cc:attribute name="updateSalvar" default="" type="String"/>
-        <cc:attribute name="renderedVoltar" default="true" type="Boolean"/>
-        <cc:attribute name="renderedExcluir" default="true" type="Boolean"/>
+        <cc:attribute name="updateSave" default="" type="String"/>
+        <cc:attribute name="renderedBack" default="true" type="Boolean"/>
+        <cc:attribute name="renderedNew" default="true" type="Boolean"/>
+        <cc:attribute name="renderedSave" default="true" type="Boolean"/>
+        <cc:attribute name="renderedDelete" default="true" type="Boolean"/>
         <cc:attribute name="renderedDefaultCommand" default="true" type="Boolean"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
     <cc:implementation> 
-        <h:panelGroup rendered="#{cc.attrs.mb.editing and cc.attrs.renderedVoltar}">
+        <h:panelGroup rendered="#{cc.attrs.mb.editing and cc.attrs.renderedBack}">
             <p:commandLink id="cancelar" value="#{b.Back}" action="#{cc.attrs.mb.cancel}" 
                        update="@form" immediate="#{empty cc.attrs.mb.entity.id}"
                        style="margin-left: 5px; font-weight: normal">
@@ -29,20 +31,20 @@
         </h:panelGroup>
         
         <p:commandButton value="#{b.New}" action="#{cc.attrs.mb.create}" update="@form" process="@this" 
-                         rendered="#{not cc.attrs.mb.editing}"
+                         rendered="#{cc.attrs.renderedNew and not cc.attrs.mb.editing}"
                          style="color: white; background-color: green; border-color: green; background: -webkit-gradient(linear, left top, left bottom, from(limegreen), to(green)) repeat-X; background: -moz-linear-gradient(270deg, limegreen, green);"/>
 
-        <p:commandButton id="salvar" value="#{b.Save}" action="#{cc.attrs.mb.save}" update="@form #{cc.attrs.updateSalvar}" 
-                         rendered="#{cc.attrs.mb.editing}"
+        <p:commandButton id="save" value="#{b.Save}" action="#{cc.attrs.mb.save}" update="@form #{cc.attrs.updateSave}" 
+                         rendered="#{cc.attrs.renderedSave and cc.attrs.mb.editing}"
                          style="color: white; background-color: green; border-color: green; background: -webkit-gradient(linear, left top, left bottom, from(limegreen), to(green)) repeat-X; background: -moz-linear-gradient(270deg, limegreen, green);"/> 
 
         <p:commandButton value="#{b.Delete}" action="#{cc.attrs.mb.deleteSelected}" update="@form" immediate="true" 
                          disabled="#{cc.attrs.mb.selected == null || cc.attrs.mb.selected.id == null}" 
                          onclick="return confirm('#{b.ConfirmExclusion}');"
-                         rendered="#{cc.attrs.renderedExcluir and cc.attrs.mb.editing and cc.attrs.mb.entity.id != null}">
+                         rendered="#{cc.attrs.renderedDelete and cc.attrs.mb.editing and cc.attrs.mb.entity.id != null}">
             <p:resetInput target="@form" />
         </p:commandButton>
         
-        <p:defaultCommand target="salvar" rendered="#{cc.attrs.mb.editing and cc.attrs.renderedDefaultCommand}"/>
+        <p:defaultCommand target="save" rendered="#{cc.attrs.mb.editing and cc.attrs.renderedDefaultCommand}"/>
     </cc:implementation>
 </html>

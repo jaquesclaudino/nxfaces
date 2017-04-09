@@ -9,9 +9,11 @@
     <!-- INTERFACE -->
     <cc:interface>
         <cc:attribute name="mb" required="true" type="com.nexten.nxfaces.crud.AbstractSelectableCRUD"/>
-        <cc:attribute name="updateSalvar" default="" type="String"/>
-        <cc:attribute name="renderedVoltar" default="true" type="Boolean"/>
-        <cc:attribute name="renderedExcluir" default="true" type="Boolean"/>
+        <cc:attribute name="updateSave" default="" type="String"/>
+        <cc:attribute name="renderedBack" default="true" type="Boolean"/>
+        <cc:attribute name="renderedNew" default="true" type="Boolean"/>
+        <cc:attribute name="renderedSave" default="true" type="Boolean"/>
+        <cc:attribute name="renderedDelete" default="true" type="Boolean"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
@@ -19,9 +21,11 @@
         <p:toolbar id="#{cc.attrs.id}Toolbar" style="margin-bottom: 0.5em">
             <f:facet name="left">
                 <nxfaces:crudToolbarButtons mb="#{cc.attrs.mb}" 
-                                            updateSalvar="#{cc.attrs.updateSalvar}" 
-                                            renderedVoltar="#{cc.attrs.renderedVoltar}"
-                                            renderedExcluir="#{cc.attrs.renderedExcluir}"/> 
+                                            updateSave="#{cc.attrs.updateSave}" 
+                                            renderedBack="#{cc.attrs.renderedBack}"
+                                            renderedNew="#{cc.attrs.renderedNew}"
+                                            renderedSave="#{cc.attrs.renderedSave}"
+                                            renderedDelete="#{cc.attrs.renderedDelete}"/> 
             </f:facet>
         </p:toolbar>
         
