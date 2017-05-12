@@ -60,11 +60,11 @@ public class DateUtil {
     
     public static boolean isSameDay(Date date1, Date date2) {
         CAL.setTime(date1);
-        int dia = CAL.get(Calendar.DAY_OF_MONTH);
-        int ano = CAL.get(Calendar.YEAR);
+        int day = CAL.get(Calendar.DAY_OF_YEAR);
+        int year = CAL.get(Calendar.YEAR);
         
         CAL.setTime(date2);
-        return (CAL.get(Calendar.DAY_OF_MONTH) == dia && CAL.get(Calendar.YEAR) == ano);
+        return CAL.get(Calendar.DAY_OF_YEAR) == day && CAL.get(Calendar.YEAR) == year;
     }
     
     public static Date addDays(Date date, int days) {
