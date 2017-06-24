@@ -71,17 +71,19 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
                 //predicados do filtro do dataTable:
                 Predicate predicateFilter = null;  
                 Predicate globalFilter = null;
-                for (Entry<String,Object> entry : filters.entrySet()) {
-                    if (entry.getKey().equals(GLOBAL_FILTER)) {
-                        for (String attributeName : globalFilterAttributeNames) {
-                            Predicate p = createPredicate(builder, root, attributeName, entry.getValue());                            
-                            globalFilter = criteria.orNotNull(builder, globalFilter, p);
+                if (filters != null) {
+                    for (Entry<String,Object> entry : filters.entrySet()) {
+                        if (entry.getKey().equals(GLOBAL_FILTER)) {
+                            for (String attributeName : globalFilterAttributeNames) {
+                                Predicate p = createPredicate(builder, root, attributeName, entry.getValue());                            
+                                globalFilter = criteria.orNotNull(builder, globalFilter, p);
+                            }
+                        } else {
+                            Predicate p = createPredicate(builder, root, entry.getKey(), entry.getValue());
+                            predicateFilter = criteria.andNotNull(builder, predicateFilter, p);
                         }
-                    } else {
-                        Predicate p = createPredicate(builder, root, entry.getKey(), entry.getValue());
-                        predicateFilter = criteria.andNotNull(builder, predicateFilter, p);
-                    }
-                }                
+                    }  
+                }
                 predicateFilter = criteria.andNotNull(builder, predicateFilter, globalFilter);
                                
                 Predicate predicateCustom = null;

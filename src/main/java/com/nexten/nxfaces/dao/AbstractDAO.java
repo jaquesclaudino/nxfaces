@@ -67,6 +67,22 @@ public abstract class AbstractDAO<T> {
         em.remove(em.merge(entity));
     }
     
+    public void refresh(T entity) {
+        em.refresh(entity);
+    }
+    
+    public void flush() {
+        em.flush();
+    }
+    
+    public void cacheEvict() {
+        em.getEntityManagerFactory().getCache().evict(getEntityClass());
+    }
+    
+    public void cacheEvict(Object id) {
+        em.getEntityManagerFactory().getCache().evict(getEntityClass(), id);
+    }
+    
     /**
      * 
      * @param <F>
