@@ -6,6 +6,7 @@ import com.nexten.nxfaces.dao.CriteriaGetter.OrderGetter;
 import com.nexten.nxfaces.dao.CriteriaGetter.PredicateGetter;
 import com.nexten.nxfaces.model.entity.Entity;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.List;
 import java.util.Map.Entry;
@@ -13,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -59,7 +61,7 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
     public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {        
         LOG.log(Level.FINEST, "first={0} | pageSize={1} | sortField={2} | sortOrder={3} | filters={4}", new Object[] {first, pageSize, sortField, sortOrder, filters});
                 
-        return dao.findAll(getPredicateGetter(filters), orderGetter, first, pageSize);
+        return dao.findAll(getPredicateGetter(filters), getOrderGetter(sortField, sortOrder), first, pageSize);
     }
     
     private PredicateGetter getPredicateGetter(final Map<String,Object> filters) {      
@@ -94,6 +96,25 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
                 return criteria.andNotNull(builder, predicateFilter, predicateCustom);
             }
         };
+    }
+    
+    private OrderGetter getOrderGetter(String sortField, SortOrder sortOrder) {
+        if (sortField != null && !sortField.isEmpty()) {
+            return new OrderGetter() {
+                @Override
+                public List getListOrder(CriteriaQuery query, CriteriaBuilder builder, Root root) {
+                    Path path = dao.getCriteriaGetter().getAttribute(root, sortField);
+                    Order order;
+                    if (SortOrder.DESCENDING.equals(sortOrder)) {
+                        order = builder.desc(path);
+                    } else {
+                        order = builder.asc(path);
+                    }
+                    return Arrays.asList(order);
+                }
+            };
+        }
+        return orderGetter;
     }
     
     private Predicate createPredicate(CriteriaBuilder builder, Root root, String attributeName, Object value) {       
