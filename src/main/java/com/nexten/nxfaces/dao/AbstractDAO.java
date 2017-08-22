@@ -12,6 +12,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -65,6 +66,12 @@ public abstract class AbstractDAO<T> {
 
     public void delete(T entity) {
         em.remove(em.merge(entity));
+    }
+    
+    public void deleteAll() {
+        CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
+        CriteriaDelete<T> query = builder.createCriteriaDelete(getEntityClass());
+        getEntityManager().createQuery(query).executeUpdate();
     }
     
     public void refresh(T entity) {
