@@ -128,7 +128,9 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
         if (path.getJavaType().equals(String.class)) {
             predicate = criteria.like(builder, path, (String) value);
         } else {
-            value = tryParse(path.getJavaType(), (String) value);
+            if (value instanceof String) {
+                value = tryParse(path.getJavaType(), (String) value);
+            }
             if (value != null) {
                 predicate = builder.equal(path, value);
             }
