@@ -140,7 +140,10 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
     private Object tryParse(Class clazz, String value) {
         try {
             if (value != null && !value.isEmpty()) {
-                if (clazz.equals(Integer.class) || clazz.equals(int.class)) {
+                if (clazz.isEnum()) {
+                    return Enum.valueOf(clazz, value);
+                    
+                } else if (clazz.equals(Integer.class) || clazz.equals(int.class)) {
                     return Integer.parseInt(value);
 
                 } else if (clazz.equals(Long.class) || clazz.equals(long.class)) {
