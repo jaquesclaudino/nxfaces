@@ -43,9 +43,10 @@ public abstract class AbstractSelectableCRUD<T extends Entity> extends AbstractC
     }
 
     public void setSelected(T selected) {
+        boolean canEditSelected = selected != null && !selected.equals(this.selected);
         this.selected = selected;
         
-        if (selected != null) {
+        if (canEditSelected) {
             editSelected();
         }
         
