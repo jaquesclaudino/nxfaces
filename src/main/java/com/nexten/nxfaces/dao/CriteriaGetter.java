@@ -53,6 +53,16 @@ public class CriteriaGetter<T> {
         };
     }
     
+    public SelectionGetter getSelectionEntityAttribute(String attributeName, boolean distinct) {
+        return new SelectionGetter() {
+            @Override
+            public Selection getSelection(CriteriaQuery query, CriteriaBuilder builder, Root root) {
+                query.distinct(distinct);
+                return root.get(attributeName);
+            }
+        };
+    }
+    
     //---------- predicate
     
     public PredicateGetter getPredicateAttributeEqual(final String attributeName, final Object value) {
@@ -96,7 +106,7 @@ public class CriteriaGetter<T> {
     }
     
     public Predicate like(CriteriaBuilder builder, Expression expression, String queryString) {
-        if (queryString != null && !queryString.isEmpty()) {                
+        if (queryString != null && !queryString.trim().isEmpty()) {                
             return builder.like(builder.lower(expression), "%" + queryString.toLowerCase() + "%");
         } else {
             return null;

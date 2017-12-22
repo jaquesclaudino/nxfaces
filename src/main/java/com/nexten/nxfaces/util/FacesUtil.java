@@ -91,7 +91,7 @@ public class FacesUtil {
         root.visitTree(visitContext, new VisitCallback() {     
             @Override
             public VisitResult visit(VisitContext context, UIComponent component) {
-                if(component.getId().equals(id)){
+                if (id.equals(component.getId())) {
                     found[0] = component;
                     return VisitResult.COMPLETE;
                 }
