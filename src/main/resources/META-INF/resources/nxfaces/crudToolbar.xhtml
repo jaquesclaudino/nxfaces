@@ -14,6 +14,7 @@
         <cc:attribute name="renderedNew" default="true" type="Boolean"/>
         <cc:attribute name="renderedSave" default="true" type="Boolean"/>
         <cc:attribute name="renderedDelete" default="true" type="Boolean"/>
+        <cc:attribute name="renderedSticky" default="true" type="Boolean"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
@@ -29,6 +30,6 @@
             </f:facet>
         </p:toolbar>
         
-        <p:sticky target="#{cc.attrs.id}Toolbar"/>
+        <p:sticky target="#{cc.attrs.id}Toolbar" rendered="#{cc.attrs.renderedSticky}"/>
     </cc:implementation>
 </html>

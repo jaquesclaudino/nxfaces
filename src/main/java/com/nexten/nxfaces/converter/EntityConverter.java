@@ -37,7 +37,7 @@ public class EntityConverter implements Converter {
                 Class clazz = Class.forName(key[1]);
                 return em.find(clazz, id);                
             } catch (ClassNotFoundException ex) {
-                LOG.log(Level.SEVERE, null, ex);
+                LOG.log(Level.SEVERE, "getAsObject error", ex);
             }
         }
         return null;
