@@ -8,7 +8,8 @@
     <!-- INTERFACE -->
     <cc:interface>
         <cc:attribute name="mb" required="true" type="com.nexten.nxfaces.crud.AbstractSelectableCRUD"/>
-        <cc:attribute name="updateSave" default="" type="String"/>
+        <cc:attribute name="updateBack" default="@form" type="String"/>
+        <cc:attribute name="updateSave" default="@form" type="String"/>
         <cc:attribute name="renderedBack" default="true" type="Boolean"/>
         <cc:attribute name="renderedNew" default="true" type="Boolean"/>
         <cc:attribute name="renderedSave" default="true" type="Boolean"/>
@@ -20,7 +21,7 @@
     <cc:implementation> 
         <h:panelGroup rendered="#{cc.attrs.mb.editing and cc.attrs.renderedBack}">
             <p:commandLink id="cancelar" value="#{b.Back}" action="#{cc.attrs.mb.cancel}" 
-                       update="@form" immediate="#{empty cc.attrs.mb.entity.id}"
+                       update="#{cc.attrs.updateBack}" immediate="#{empty cc.attrs.mb.entity.id}"
                        style="margin-left: 5px; font-weight: normal">
                 <p:resetInput target="@form" />
             </p:commandLink>
@@ -34,7 +35,7 @@
                          rendered="#{cc.attrs.renderedNew and not cc.attrs.mb.editing}"
                          style="color: white; background-color: green; border-color: green; background: -webkit-gradient(linear, left top, left bottom, from(limegreen), to(green)) repeat-X; background: -moz-linear-gradient(270deg, limegreen, green);"/>
 
-        <p:commandButton id="save" value="#{b.Save}" action="#{cc.attrs.mb.save}" update="@form #{cc.attrs.updateSave}" 
+        <p:commandButton id="save" value="#{b.Save}" action="#{cc.attrs.mb.save}" update="#{cc.attrs.updateSave}" 
                          rendered="#{cc.attrs.renderedSave and cc.attrs.mb.editing}"
                          style="color: white; background-color: green; border-color: green; background: -webkit-gradient(linear, left top, left bottom, from(limegreen), to(green)) repeat-X; background: -moz-linear-gradient(270deg, limegreen, green);"/> 
 
