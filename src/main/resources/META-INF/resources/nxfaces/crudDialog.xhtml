@@ -8,7 +8,7 @@
     <cc:interface>
         <cc:attribute name="header" required="true" type="String"/>
         <cc:attribute name="mb" required="true" type="com.nexten.nxfaces.crud.AbstractCRUD"/>
-        <cc:attribute name="updateSave" default="" type="String"/>
+        <cc:attribute name="updateSave" default="@form" type="String"/>
         <cc:attribute name="separatorRendered" default="true" type="Boolean"/>
         <cc:attribute name="width" type="Integer"/>        
     </cc:interface>
@@ -27,7 +27,7 @@
 
             <p:separator rendered="#{cc.attrs.separatorRendered}"/>
             <p:defaultCommand target="saveDialog" rendered="#{cc.attrs.mb.editing}"/>                    
-            <p:commandButton id="saveDialog" value="#{b.Save}" action="#{cc.attrs.mb.save}" update="@form #{cc.attrs.updateSave}"/> 
+            <p:commandButton id="saveDialog" value="#{b.Save}" action="#{cc.attrs.mb.save}" update="#{cc.attrs.updateSave}"/> 
             <!--ajax="false"-->
             <p:commandButton id="cancelar" value="#{b.Cancel}" action="#{cc.attrs.mb.cancel}" update="@form" process="@this"/>
         </p:dialog>
