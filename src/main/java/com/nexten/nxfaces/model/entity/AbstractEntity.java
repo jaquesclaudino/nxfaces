@@ -12,6 +12,9 @@ public abstract class AbstractEntity implements Entity, Serializable {
         
     @Override
     public int hashCode() {
+    	if (getId() == null) {
+            return super.hashCode();
+    	}    		
         int hash = 5;
         hash = 47 * hash + Objects.hashCode(getId());
         return hash;
@@ -26,6 +29,9 @@ public abstract class AbstractEntity implements Entity, Serializable {
             return false;
         }
         final AbstractEntity other = (AbstractEntity) obj;
+        if (this.getId() == null && other.getId() == null) {
+            return super.equals(obj);
+        }        
         if (!Objects.equals(this.getId(), other.getId())) {
             return false;
         }

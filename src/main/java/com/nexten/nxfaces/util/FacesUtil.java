@@ -45,6 +45,10 @@ public class FacesUtil {
         addMsg(FacesMessage.SEVERITY_WARN, getBundleString(bundleKey), "");
     }
 
+    public static String[] getBundleStrings(String bundleKey) {
+    	return getBundleString(bundleKey).split(";");
+    }
+    
     public static String getBundleString(String bundleKey) {
         ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_BASE_NAME, FacesContext.getCurrentInstance().getViewRoot().getLocale());
         try {
