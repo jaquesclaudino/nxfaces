@@ -94,7 +94,10 @@ public class DateUtil {
         return CAL.getTime();
     }
     
-    public static String formatMinutes(int minutes) {   
+    public static String formatMinutes(Integer minutes) {  
+        if (minutes == null) {
+            return "00:00";
+        }
         return String.format("%02d:%02d", minutes / 60, minutes % 60);
     }
     

@@ -6,7 +6,6 @@ import com.nexten.nxfaces.dao.CriteriaGetter.OrderGetter;
 import com.nexten.nxfaces.dao.CriteriaGetter.PredicateGetter;
 import com.nexten.nxfaces.model.entity.Entity;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +20,6 @@ import org.primefaces.event.CloseEvent;
 public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     
     private static final Logger LOG = Logger.getLogger(AbstractCRUD.class.getName());
-    private static final List<String> DEFAULT_GLOBAL_FILTER_ATTRIBUTE_NAMES = Arrays.asList("name");
     
     protected T entity;    
     private List<T> listAll;
@@ -103,7 +101,7 @@ public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     }
     
     protected List<String> getGlobalFilterAttributeNames() {
-        return DEFAULT_GLOBAL_FILTER_ATTRIBUTE_NAMES;
+        return null;
     }
     
     //chamado ao fechar o dialog:

@@ -2,6 +2,7 @@ package com.nexten.nxfaces.util;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import javax.el.ELContext;
@@ -26,17 +27,24 @@ public class FacesUtil {
     private static final String BUNDLE_BASE_NAME = "Bundle";
     
     public static void addMsg(String clientId, FacesMessage.Severity severity, String summary, String detail) {
+        if (detail == null) {
+            detail = "";
+        }
         FacesContext.getCurrentInstance().addMessage(clientId, new FacesMessage(severity, summary, detail));
     }
 
     public static void addMsg(FacesMessage.Severity severity, String summary, String detail) {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, summary, detail));
+        addMsg(null, severity, summary, detail);
     }
 
     public static void addMsgInfoBundle(String bundleKey) {
         addMsg(FacesMessage.SEVERITY_INFO, getBundleString(bundleKey), "");
     }
 
+    public static void addMsgInfoBundle(String bundleKey, Object... args) {
+        addMsg(FacesMessage.SEVERITY_INFO, String.format(getBundleString(bundleKey), args), "");
+    }
+    
     public static void addMsgErrorBundle(String bundleKey) {
         addMsg(FacesMessage.SEVERITY_ERROR, getBundleString(bundleKey), "");
     }
@@ -49,13 +57,17 @@ public class FacesUtil {
     	return getBundleString(bundleKey).split(";");
     }
     
-    public static String getBundleString(String bundleKey) {
-        ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_BASE_NAME, FacesContext.getCurrentInstance().getViewRoot().getLocale());
+    public static String getBundleString(String bundleKey, Locale locale) {
+        ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_BASE_NAME, locale);
         try {
             return bundle.getString(bundleKey); 
         } catch (MissingResourceException e) {
             return "???" + bundleKey + "???";
         }
+    }
+    
+    public static String getBundleString(String bundleKey) {
+        return getBundleString(bundleKey, FacesContext.getCurrentInstance().getViewRoot().getLocale());
     }
 
     public static ExternalContext getExternalContext() {
