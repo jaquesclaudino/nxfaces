@@ -12,30 +12,36 @@
         <cc:attribute name="host" default="" type="String"/>     
         <cc:attribute name="contextPath" default="" type="String"/>     
         <cc:attribute name="name" type="String" required="true"/>
-          
+        
         <cc:attribute name="action" method-signature="void action()"/>
+                
         <cc:attribute name="update" type="String"/>
-        <cc:attribute name="log" default="null" type="String"/>
-        <cc:attribute name="showLog" default="true" type="Boolean"/>
+        <cc:attribute name="logVisible" default="true" type="Boolean"/>
+        <cc:attribute name="logOnlyError" default="true" type="Boolean"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         <h:form>
-            <p:remoteCommand name="onwebsocketmessage" action="#{cc.attrs.action}" process="@this" update="#{cc.attrs.update}"/>
+            <p:remoteCommand name="onwebsocketmessage" action="#{cc.attrs.action}" process="@this" update="#{cc.attrs.update}" global="false" async="true"/>
         </h:form>
             
         <h:outputScript name="js/nxwebsocket.js"/>
-        <script>
-            new NxWebSocket(
+        <script>            
+            var websocket = new NxWebSocket(
                     '#{cc.attrs.host}',
                     '#{cc.attrs.contextPath}',
                     '#{cc.attrs.name}', 
-                    #{cc.attrs.log}, 
-                    #{cc.attrs.showLog}, 
+                    #{cc.attrs.logVisible}, 
+                    #{cc.attrs.logOnlyError}, 
                     function(message) {
                         onwebsocketmessage([{name:'websocketmessage',value: message}]);
-                    });
+                    }
+            );
+        
+            function sendWebsocketMessage(message) {
+                websocket.sendMessage(message);
+            }
         </script>
     </cc:implementation>
     
