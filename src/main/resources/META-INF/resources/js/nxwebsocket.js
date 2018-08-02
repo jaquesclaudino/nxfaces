@@ -1,7 +1,9 @@
-function NxWebSocket(host, contextPath, websocketName, logVisible, logOnlyError, onmessage) {
+function NxWebSocket(host, contextPath, websocketName, logVisible, logOnlyError, onmessageCallback) {
     this.logVisible = logVisible;
-    this.logOnlyError = logOnlyError;
-    this.onmessage = onmessage;
+    this.logOnlyError = logOnlyError;    
+    onmessage = onmessageCallback;
+    onconnect = null;
+    ondisconnect = null;
     connected = false;
     connectMessage = null;
 
@@ -14,11 +16,17 @@ function NxWebSocket(host, contextPath, websocketName, logVisible, logOnlyError,
             if (connectMessage !== null) {
                 ws.send(connectMessage);
             }
+            if (onconnect !== null) {                
+                onconnect();
+            }
         };
 
         ws.onclose = function(evt) {
             addLog('Disconnected', true);
             connected = false;
+            if (ondisconnect !== null) {
+                ondisconnect();
+            }
         };
 
         ws.onmessage = function(evt) {
@@ -33,8 +41,16 @@ function NxWebSocket(host, contextPath, websocketName, logVisible, logOnlyError,
         };
     }
     
-    this.setOnMessage = function(onmessage) {
-        this.onmessage = onmessage;
+    this.setOnMessage = function(callback) {
+        onmessage = callback;
+    };
+    
+    this.setOnConnect = function(callback) {
+        onconnect = callback;
+    };
+    
+    this.setOnDisconnect = function(callback) {
+        ondisconnect = callback;
     };
     
     this.sendMessage = function(message) {
