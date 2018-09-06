@@ -89,13 +89,10 @@ function NxWebSocket(host, contextPath, websocketName, logVisible, logOnlyError,
     }
 
     function addLog(message, isError) {
-        if (!logVisible) {
-            return;
-        }
-
-        line = 'WebSocket: ' + message;
+        line = 'WebSocket: ' + message;       
+        
         log = document.getElementById("log");
-        if (log !== null && typeof log !== 'undefined' && (isError || !logOnlyError)) {
+        if (logVisible && log !== null && typeof log !== 'undefined' && (isError || !logOnlyError)) {
             setTimeout(function(){ 
                 log.innerHTML = line;
             }, 2000);
