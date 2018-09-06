@@ -189,7 +189,7 @@ public abstract class AbstractDAO<T> {
                     .setMaxResults(1)
                     .getSingleResult();
         } catch (NoResultException ex) {
-            LOG.log(Level.FINEST, "No result found", ex);
+            // LOG.log(Level.FINEST, "No result found", ex);
             return null;
         }
     }
