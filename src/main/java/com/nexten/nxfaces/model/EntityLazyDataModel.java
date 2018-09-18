@@ -41,13 +41,13 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
     private final PredicateGetter predicateGetter;
     private final OrderGetter orderGetter;
     private final List<String> globalFilterAttributeNames;
+    private String lastFilters;
     
     public EntityLazyDataModel(AbstractDAO<T> dao, PredicateGetter predicateGetter, OrderGetter orderGetter, List<String> globalFilterAttributeNames) {
         this.dao = dao;
         this.predicateGetter = predicateGetter;
         this.orderGetter = orderGetter;
         this.globalFilterAttributeNames = globalFilterAttributeNames != null ? globalFilterAttributeNames : getDefaultGlobalFilterAttributeNames();
-        this.setRowCount(dao.findCount(predicateGetter).intValue());
         LOG.setLevel(Level.ALL);
     }
         
@@ -65,11 +65,11 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
     public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {        
         LOG.log(Level.FINEST, "LazyLoad: first={0}; pageSize={1}; sortField={2}; sortOrder={3}; filters={4}", new Object[] {first, pageSize, sortField, sortOrder, filters});
                 
-        List<T> result = dao.findAll(getPredicateGetter(filters), getOrderGetter(sortField, sortOrder), first, pageSize);
-        if (getRowCount() == 0 || result.isEmpty()) {
-            setRowCount(result.size()); // fix emptyMessage
+        if (!filters.toString().equals(lastFilters)) {
+            setRowCount(dao.findCount(getPredicateGetter(filters)).intValue());
+            lastFilters = filters.toString();
         }        
-        return result;
+        return dao.findAll(getPredicateGetter(filters), getOrderGetter(sortField, sortOrder), first, pageSize);
     }
     
     private PredicateGetter getPredicateGetter(final Map<String,Object> filters) {      
