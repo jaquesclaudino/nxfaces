@@ -12,11 +12,12 @@
         <cc:attribute name="firstItem" default="#{b.Select}" type="String"/>
         <cc:attribute name="required" default="false" type="Boolean"/>
         <cc:attribute name="itemLabel" default="#{item.name}"/>
+        <cc:attribute name="converter" default="#{entityConverter}"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>        
-        <h:selectOneMenu id="select" value="#{cc.attrs.value}" converter="#{entityConverter}" required="#{cc.attrs.required}">
+        <h:selectOneMenu id="select" value="#{cc.attrs.value}" converter="#{cc.attrs.converter}" required="#{cc.attrs.required}">
             <f:selectItem itemLabel="#{cc.attrs.firstItem}"/>
             <f:selectItems value="#{cc.attrs.items}" var="item" itemLabel="#{cc.attrs.itemLabel}" itemValue="#{item}"/>
         </h:selectOneMenu>

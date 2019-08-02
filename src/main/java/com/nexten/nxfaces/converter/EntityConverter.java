@@ -21,7 +21,7 @@ public class EntityConverter implements Converter {
 
     private static final Logger LOG = Logger.getLogger(EntityConverter.class.getName());
     
-    @PersistenceContext
+    @PersistenceContext(name = "entity-manager-nxfaces")
     private EntityManager em;
     
     @SuppressWarnings("unchecked")

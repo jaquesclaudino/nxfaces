@@ -30,7 +30,7 @@ public abstract class AbstractDAO<T> {
         LOG.setLevel(Level.ALL);
     }
 
-    @PersistenceContext
+    @PersistenceContext(name = "entity-manager-nxfaces")
     private EntityManager em;
 
     private final CriteriaGetter<T> criteriaGetter = new CriteriaGetter<>();
@@ -57,15 +57,15 @@ public abstract class AbstractDAO<T> {
     }
     
     public void persist(T entity) {
-        em.persist(entity);
+        getEntityManager().persist(entity);
     }
     
     public T save(T entity) {
-        return em.merge(entity);
+        return getEntityManager().merge(entity);
     }
 
     public void delete(T entity) {
-        em.remove(em.merge(entity));
+        getEntityManager().remove(getEntityManager().merge(entity));
     }
     
     public void deleteAll() {
@@ -75,19 +75,19 @@ public abstract class AbstractDAO<T> {
     }
     
     public void refresh(T entity) {
-        em.refresh(entity);
+        getEntityManager().refresh(entity);
     }
     
     public void flush() {
-        em.flush();
+        getEntityManager().flush();
     }
     
     public void cacheEvict() {
-        em.getEntityManagerFactory().getCache().evict(getEntityClass());
+        getEntityManager().getEntityManagerFactory().getCache().evict(getEntityClass());
     }
     
     public void cacheEvict(Object id) {
-        em.getEntityManagerFactory().getCache().evict(getEntityClass(), id);
+        getEntityManager().getEntityManagerFactory().getCache().evict(getEntityClass(), id);
     }
     
     /**
@@ -102,7 +102,7 @@ public abstract class AbstractDAO<T> {
      */
     //TODO: how to extract fieldClass of <F> ?
     protected <F> CriteriaQuery<F> createCriteriaQuery(SelectionGetter selectionGetter, PredicateGetter predicateGetter, OrderGetter orderGetter, Class fieldClass) {
-        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<F> query = builder.createQuery(fieldClass);
         Root<T> root = query.from(getEntityClass());
         
@@ -133,7 +133,7 @@ public abstract class AbstractDAO<T> {
     //---------- find list
         
     public List<T> findAll(PredicateGetter predicateGetter, OrderGetter orderGetter, int firstResult, int maxResults) {
-        Query query =  em.createQuery(createCriteriaQuery(predicateGetter, orderGetter));
+        Query query =  getEntityManager().createQuery(createCriteriaQuery(predicateGetter, orderGetter));
         if (firstResult > 0) {
             query.setFirstResult(firstResult);
         }        
@@ -167,7 +167,7 @@ public abstract class AbstractDAO<T> {
     
     public <F> F findField(SelectionGetter selectionGetter, PredicateGetter predicateGetter, Class fieldClass) {
         CriteriaQuery<F> query = createCriteriaQuery(selectionGetter, predicateGetter, null, fieldClass);
-        return em.createQuery(query).getSingleResult();
+        return getEntityManager().createQuery(query).getSingleResult();
     }
     
     public Long findCount(PredicateGetter predicateGetter) {
@@ -175,7 +175,7 @@ public abstract class AbstractDAO<T> {
     }
     
     public T findById(Object id) {
-        return em.find(getEntityClass(), id);
+        return getEntityManager().find(getEntityClass(), id);
     }
 
     public T findFirstByAttributeEqual(final String attributeName, final Object value) {
@@ -184,7 +184,7 @@ public abstract class AbstractDAO<T> {
     
     public T findFirst(PredicateGetter predicateGetter, OrderGetter orderGetter) {
         try {
-            return em
+            return getEntityManager()
                     .createQuery(createCriteriaQuery(predicateGetter, orderGetter))
                     .setMaxResults(1)
                     .getSingleResult();
