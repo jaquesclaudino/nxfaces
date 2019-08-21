@@ -13,6 +13,9 @@
         <cc:attribute name="rowStyleClass"/>
         <cc:attribute name="globalFilter" default="true" type="Boolean"/>
         <cc:attribute name="widgetVar" default="dataTable" type="String"/>
+        <cc:attribute name="paginator" default="true" type="Boolean"/>
+        <cc:attribute name="paginatorAlwaysVisible" default="false" type="Boolean"/>
+        <cc:attribute name="paginatorPosition" default="bottom" type="String"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
@@ -21,7 +24,7 @@
 
         <p:dataTable id="table" value="#{cc.attrs.mb.dataModel}" var="item" widgetVar="#{cc.attrs.widgetVar}"
                      selectionMode="single" selection="#{cc.attrs.mb.selected}"  
-                     paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom" 
+                     paginator="#{cc.attrs.paginator}" paginatorAlwaysVisible="#{cc.attrs.paginatorAlwaysVisible}" paginatorPosition="#{cc.attrs.paginatorPosition}" 
                      rows="#{cc.attrs.rows}" lazy="true" rowsPerPageTemplate="5,10,20,50" rowStyleClass="#{cc.attrs.rowStyleClass}"
                      emptyMessage="#{b.NoRecords}"
                      rendered="#{not cc.attrs.mb.editing}">

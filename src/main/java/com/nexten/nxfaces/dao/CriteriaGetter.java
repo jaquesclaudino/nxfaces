@@ -53,6 +53,15 @@ public class CriteriaGetter<T> {
         };
     }
     
+    public SelectionGetter getSelectionEntityCountDistinct() {
+        return new SelectionGetter() {
+            @Override
+            public Selection getSelection(CriteriaQuery query, CriteriaBuilder builder, Root root) {
+                return builder.countDistinct(root);
+            }
+        };
+    }
+    
     public SelectionGetter getSelectionEntityAttribute(String attributeName, boolean distinct) {
         return new SelectionGetter() {
             @Override

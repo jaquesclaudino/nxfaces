@@ -174,6 +174,10 @@ public abstract class AbstractDAO<T> {
         return findField(criteriaGetter.getSelectionEntityCount(), predicateGetter, Long.class);
     }
     
+    public Long findCountDistinct(PredicateGetter predicateGetter) {
+        return findField(criteriaGetter.getSelectionEntityCountDistinct(), predicateGetter, Long.class);
+    }
+    
     public T findById(Object id) {
         return getEntityManager().find(getEntityClass(), id);
     }
