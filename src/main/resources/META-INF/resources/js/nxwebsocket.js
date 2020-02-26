@@ -72,11 +72,14 @@ function NxWebSocket(host, contextPath, websocketName, logVisible, logOnlyError,
             host = window.location.host;
         }
         
-        if (!contextPath || contextPath.length === 0) {
-            contextPath = location.pathname.split('/')[1];
+        if (websocketName.startsWith('/')) {
+            url = wsProtocol + host + websocketName;
+        } else {
+            if (!contextPath || contextPath.length === 0) {
+                contextPath = location.pathname.split('/')[1];
+            }
+            url = wsProtocol + host + '/' + contextPath + '/' + websocketName;
         }
-        
-        url = wsProtocol + host + '/' + contextPath + '/' + websocketName;
 
         if ('WebSocket' in window) {
             return new WebSocket(url);
