@@ -23,6 +23,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.ManagedType;
+import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SelectableDataModel;
 import org.primefaces.model.SortOrder;
@@ -59,10 +60,10 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
     @Override
     public T getRowData(String rowKey) {
         return dao.findById(Long.parseLong(rowKey));
-    }       
+    }
     
     @Override  
-    public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {        
+    public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, FilterMeta> filters) {        
         LOG.log(Level.FINEST, "LazyLoad: first={0}; pageSize={1}; sortField={2}; sortOrder={3}; filters={4}", new Object[] {first, pageSize, sortField, sortOrder, filters});
                 
         if (!filters.toString().equals(lastFilters)) {
@@ -72,7 +73,7 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
         return dao.findAll(getPredicateGetter(filters), getOrderGetter(sortField, sortOrder), first, pageSize);
     }
     
-    private PredicateGetter getPredicateGetter(final Map<String,Object> filters) {      
+    private PredicateGetter getPredicateGetter(final Map<String, FilterMeta> filters) {      
         return new PredicateGetter() {
             @Override
             public Predicate getPredicate(CriteriaQuery query, CriteriaBuilder builder, Root root) {
@@ -82,14 +83,14 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
                 Predicate predicateFilter = null;  
                 Predicate globalFilter = null;
                 if (filters != null) {
-                    for (Entry<String,Object> entry : filters.entrySet()) {
+                    for (Entry<String, FilterMeta> entry : filters.entrySet()) {
                         if (entry.getKey().equals(GLOBAL_FILTER)) {
                             for (String attributeName : globalFilterAttributeNames) {
-                                Predicate p = createPredicate(builder, root, attributeName, entry.getValue());
+                                Predicate p = createPredicate(builder, root, attributeName, entry.getValue().getFilterValue());
                                 globalFilter = criteria.orNotNull(builder, globalFilter, p);
                             }
                         } else {
-                            Predicate p = createPredicate(builder, root, entry.getKey(), entry.getValue());
+                            Predicate p = createPredicate(builder, root, entry.getKey(), entry.getValue().getFilterValue());
                             predicateFilter = criteria.andNotNull(builder, predicateFilter, p);
                         }
                     }  
