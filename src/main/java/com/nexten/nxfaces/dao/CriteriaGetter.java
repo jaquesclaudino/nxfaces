@@ -3,6 +3,7 @@ package com.nexten.nxfaces.dao;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
@@ -136,20 +137,24 @@ public class CriteriaGetter<T> {
     
     //---------- order
     
-    public OrderGetter getOrderAttributeAsc(final String attributeName) {
-        return new OrderGetter() {
+    public OrderGetter<T> getOrderAttributeAsc(final String... attributeNames) {
+        return new OrderGetter<T>() {
             @Override
-            public List getListOrder(CriteriaQuery query, CriteriaBuilder builder, Root root) {          
-                return Arrays.asList(builder.asc(root.get(attributeName)));
+            public List<Order> getListOrder(CriteriaQuery<T> query, CriteriaBuilder builder, Root<T> root) {
+                return Arrays.stream(attributeNames)
+                        .map(attributeName -> builder.asc(root.get(attributeName)))
+                        .collect(Collectors.toList());
             }
         };
     }
     
-    public OrderGetter getOrderAttributeDesc(final String attributeName) {
-        return new OrderGetter() {
+    public OrderGetter<T> getOrderAttributeDesc(final String... attributeNames) {
+        return new OrderGetter<T>() {
             @Override
-            public List getListOrder(CriteriaQuery query, CriteriaBuilder builder, Root root) {          
-                return Arrays.asList(builder.desc(root.get(attributeName)));
+            public List<Order> getListOrder(CriteriaQuery<T> query, CriteriaBuilder builder, Root<T> root) {
+                return Arrays.stream(attributeNames)
+                        .map(attributeName -> builder.desc(root.get(attributeName)))
+                        .collect(Collectors.toList());
             }
         };
     }
