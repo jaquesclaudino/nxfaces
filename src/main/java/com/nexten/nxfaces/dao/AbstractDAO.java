@@ -26,10 +26,6 @@ public abstract class AbstractDAO<T> {
 
     private static final Logger LOG = Logger.getLogger(AbstractDAO.class.getName());
     
-    static {
-        LOG.setLevel(Level.ALL);
-    }
-
     @PersistenceContext(name = "entity-manager-nxfaces")
     private EntityManager em;
 
@@ -193,7 +189,6 @@ public abstract class AbstractDAO<T> {
                     .setMaxResults(1)
                     .getSingleResult();
         } catch (NoResultException ex) {
-            // LOG.log(Level.FINEST, "No result found", ex);
             return null;
         }
     }

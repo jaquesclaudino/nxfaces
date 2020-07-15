@@ -7,6 +7,9 @@ package com.nexten.nxfaces.util;
  */
 public class ExceptionUtil {
 
+    private ExceptionUtil() {
+    }
+
     public static String getCauseMessage(Throwable throwable) {
         if (throwable.getCause() != null) {
             return getCauseMessage(throwable.getCause());

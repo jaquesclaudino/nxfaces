@@ -8,6 +8,9 @@ import javax.ws.rs.client.WebTarget;
  * @author Jaques Claudino
  */
 public class RestClientFactory {
+
+    private RestClientFactory() {
+    }
     
     public static WebTarget createWebTargetApacheCXF(String baseAddress, int timeout) {
         return ClientBuilder

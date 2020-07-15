@@ -20,7 +20,7 @@ import javax.persistence.criteria.Selection;
  */
 public class CriteriaGetter<T> {
     
-    public enum DateFilterType {BEGIN_OR_END, BEGIN, END};
+    public enum DateFilterType { BEGIN_OR_END, BEGIN, END }
     
     public interface SelectionGetter<T> {
         Selection getSelection(CriteriaQuery<T> query, CriteriaBuilder builder, Root<T> root);

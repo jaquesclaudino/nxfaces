@@ -49,7 +49,7 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
         this.predicateGetter = predicateGetter;
         this.orderGetter = orderGetter;
         this.globalFilterAttributeNames = globalFilterAttributeNames != null ? globalFilterAttributeNames : getDefaultGlobalFilterAttributeNames();
-        LOG.setLevel(Level.ALL);
+        LOG.setLevel(Level.ALL); // NOSONAR
     }
         
     @Override

@@ -45,7 +45,7 @@ public class EntityConverter implements Converter {
 
     @Override
     public String getAsString(FacesContext ctx, UIComponent component, Object value) {
-        if (value != null && value instanceof Entity) {
+        if (value instanceof Entity) {
             Entity entity = (Entity) value;
             return entity.getId() + "|" + value.getClass().getName();
         }

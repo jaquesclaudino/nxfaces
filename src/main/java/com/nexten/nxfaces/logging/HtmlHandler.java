@@ -47,7 +47,7 @@ public class HtmlHandler extends Handler {
             instance = new HtmlHandler(Thread.currentThread().getContextClassLoader());
             instance.setFormatter(new HtmlFormatter());
             instance.setLevel(DEFAULT_LEVEL);
-            Logger.getLogger("").addHandler(instance);
+            Logger.getLogger("").addHandler(instance); // NOSONAR
         }
         
         return instance;

@@ -7,8 +7,6 @@ import com.nexten.nxfaces.dao.CriteriaGetter.PredicateGetter;
 import com.nexten.nxfaces.model.entity.Entity;
 import java.io.Serializable;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.model.DataModel;
 import org.primefaces.event.CloseEvent;
 
@@ -19,8 +17,6 @@ import org.primefaces.event.CloseEvent;
  */
 public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     
-    private static final Logger LOG = Logger.getLogger(AbstractCRUD.class.getName());
-    
     protected T entity;    
     private List<T> listAll;
     private DataModel<T> dataModel;
@@ -28,10 +24,6 @@ public abstract class AbstractCRUD<T extends Entity> implements Serializable {
     private String globalFilter;
  
     public abstract AbstractDAO<T> getDAO();
-
-    public AbstractCRUD() {
-        LOG.setLevel(Level.ALL);
-    }
 
     public boolean isEditing() {
         return editing;

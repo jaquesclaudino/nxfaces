@@ -15,7 +15,7 @@ import java.util.logging.LogRecord;
  */
 public class HtmlFormatter extends Formatter {
 
-    private static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
+    private static final String SDF_PATTERN = "dd/MM/yyyy HH:mm:ss.SSS";
     private static final int DEFAULT_MAX_STACK_LENGTH = 500;    
     
     private static final String SPAN_RED = "<span style='color: red; font-weight: bold;'>";
@@ -28,7 +28,7 @@ public class HtmlFormatter extends Formatter {
     @Override
     public String format(LogRecord record) {
         StringBuilder sb = new StringBuilder();
-        sb.append(SDF.format(new Date(record.getMillis())));
+        sb.append(new SimpleDateFormat(SDF_PATTERN).format(new Date(record.getMillis())));
         sb.append(' ');
                 
         String message = getMessage(record);

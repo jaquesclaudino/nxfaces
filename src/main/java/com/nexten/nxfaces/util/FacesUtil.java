@@ -12,7 +12,6 @@ import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.ExternalContext;
@@ -25,6 +24,9 @@ import javax.faces.context.FacesContext;
 public class FacesUtil {
 
     private static final String BUNDLE_BASE_NAME = "Bundle";
+
+    private FacesUtil() {
+    }
     
     public static void addMsg(String clientId, FacesMessage.Severity severity, String summary, String detail) {
         if (detail == null) {
@@ -94,8 +96,7 @@ public class FacesUtil {
         Application app = facesContext.getApplication();
         ExpressionFactory elFactory = app.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
-        ValueExpression valueExp = elFactory.createValueExpression(elContext, expression, Object.class);
-        return valueExp;
+        return elFactory.createValueExpression(elContext, expression, Object.class);
     }
     
     public static UIComponent findComponent(final String id) {
@@ -104,15 +105,12 @@ public class FacesUtil {
         VisitContext visitContext = VisitContext.createVisitContext(context);
         final UIComponent[] found = new UIComponent[1];
 
-        root.visitTree(visitContext, new VisitCallback() {     
-            @Override
-            public VisitResult visit(VisitContext context, UIComponent component) {
-                if (id.equals(component.getId())) {
-                    found[0] = component;
-                    return VisitResult.COMPLETE;
-                }
-                return VisitResult.ACCEPT;              
+        root.visitTree(visitContext, (VisitContext context1, UIComponent component) -> {
+            if (id.equals(component.getId())) {
+                found[0] = component;
+                return VisitResult.COMPLETE;              
             }
+            return VisitResult.ACCEPT;
         });
 
         return found[0];
