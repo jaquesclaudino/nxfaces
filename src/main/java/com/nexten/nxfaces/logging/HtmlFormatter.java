@@ -16,7 +16,7 @@ import java.util.logging.LogRecord;
 public class HtmlFormatter extends Formatter {
 
     private static final String SDF_PATTERN = "dd/MM/yyyy HH:mm:ss.SSS";
-    private static final int DEFAULT_MAX_STACK_LENGTH = 500;    
+    private static final int DEFAULT_MAX_STACK_LENGTH = 1000;    
     
     private static final String SPAN_RED = "<span style='color: red; font-weight: bold;'>";
     private static final String SPAN_ORANGE = "<span style='color: #FF8C00; font-weight: bold;'>";
@@ -59,7 +59,7 @@ public class HtmlFormatter extends Formatter {
         }
         
         if (record.getThrown() != null) {           
-            sb.append("<div style='padding-left: 20px; padding-bottom: 20px'>");            
+            sb.append("<div style='padding-left: 20px; padding-bottom: 20px; font-family: inherit; font-size: inherit'>");            
 
             StringWriter sw = new StringWriter();
             try (PrintWriter pw = new PrintWriter(sw)) {
