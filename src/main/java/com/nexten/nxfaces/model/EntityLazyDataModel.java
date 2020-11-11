@@ -73,7 +73,7 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
         return dao.findAll(getPredicateGetter(filters), getOrderGetter(sortField, sortOrder), first, pageSize);
     }
     
-    private PredicateGetter getPredicateGetter(final Map<String, FilterMeta> filters) {      
+    protected PredicateGetter getPredicateGetter(final Map<String, FilterMeta> filters) {      
         return new PredicateGetter() {
             @Override
             public Predicate getPredicate(CriteriaQuery query, CriteriaBuilder builder, Root root) {
@@ -107,7 +107,7 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
         };
     }
     
-    private OrderGetter getOrderGetter(String sortField, SortOrder sortOrder) {
+    protected OrderGetter getOrderGetter(String sortField, SortOrder sortOrder) {
         if (sortField != null && !sortField.isEmpty()) {
             return new OrderGetter() {
                 @Override
