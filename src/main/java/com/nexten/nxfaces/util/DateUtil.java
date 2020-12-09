@@ -74,6 +74,16 @@ public class DateUtil {
         return cal.get(Calendar.DAY_OF_YEAR) == day && cal.get(Calendar.YEAR) == year;
     }
     
+    public static boolean isSameMonth(Date date1, Date date2) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date1);
+        int month = cal.get(Calendar.MONTH);
+        int year = cal.get(Calendar.YEAR);
+        
+        cal.setTime(date2);
+        return cal.get(Calendar.MONTH) == month && cal.get(Calendar.YEAR) == year;
+    }
+    
     public static Date addDays(Date date, int days) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
