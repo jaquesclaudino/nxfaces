@@ -88,10 +88,12 @@ public class HtmlHandler extends Handler {
         }
     }
     
-    public synchronized String getAsHtml() {
+    public synchronized String getAsHtml(String filter) {
         StringBuilder sb = new StringBuilder();
         for (String line : list) {
-            sb.append(line);        
+            if (filter == null || line.toLowerCase().contains(filter.toLowerCase())) {
+                sb.append(line);
+            }
         }
         return sb.toString();
     }
