@@ -4,6 +4,7 @@ import com.nexten.nxfaces.dao.CriteriaGetter.OrderGetter;
 import com.nexten.nxfaces.dao.CriteriaGetter.PredicateGetter;
 import com.nexten.nxfaces.dao.CriteriaGetter.SelectionGetter;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +33,22 @@ public abstract class AbstractDAO<T> {
     private final CriteriaGetter<T> criteriaGetter = new CriteriaGetter<>();
     
     public Class<T> getEntityClass() {
-        return (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        // works on apache-tomee, glassfish and wildfly, but does not on weblogic, causing:
+        // ClassCastException: java.lang.Class cannot be cast to java.lang.reflect.ParameterizedType
+        // return (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        
+        // weblogic bugfix: https://stackoverflow.com/questions/3403909/get-generic-type-of-class-at-runtime
+        return findEntityClass(getClass());
+    }   
+  
+    private Class<T> findEntityClass(Type type) {
+        if (type instanceof ParameterizedType) {
+            return (Class<T>) ((ParameterizedType) type).getActualTypeArguments()[0];
+        } else if (type != null) {
+            return findEntityClass(((Class) type).getGenericSuperclass());
+        } else {
+            return null;
+        }
     }
 
     public EntityManager getEntityManager() {
