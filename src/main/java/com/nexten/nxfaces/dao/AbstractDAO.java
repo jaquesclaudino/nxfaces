@@ -86,6 +86,12 @@ public abstract class AbstractDAO<T> {
         getEntityManager().createQuery(query).executeUpdate();
     }
     
+    public void deleteAll(List<T> list) {
+        for (T entity : list) {
+            delete(entity);
+        }
+    }
+    
     public void refresh(T entity) {
         getEntityManager().refresh(entity);
     }
@@ -191,6 +197,9 @@ public abstract class AbstractDAO<T> {
     }
     
     public T findById(Object id) {
+        if (id == null) {
+            return null;
+        }
         return getEntityManager().find(getEntityClass(), id);
     }
 
