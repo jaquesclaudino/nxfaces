@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.Map.Entry;
@@ -42,6 +43,7 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
     private final PredicateGetter predicateGetter;
     private final OrderGetter orderGetter;
     private final List<String> globalFilterAttributeNames;
+    private final Map<String,T> rowDataCache = new HashMap<>();
     private String lastFilters;
     
     public EntityLazyDataModel(AbstractDAO<T> dao, PredicateGetter predicateGetter, OrderGetter orderGetter, List<String> globalFilterAttributeNames) {
@@ -59,7 +61,13 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
 
     @Override
     public T getRowData(String rowKey) {
-        return dao.findById(Long.parseLong(rowKey));
+        T result = rowDataCache.get(rowKey);
+        if (result == null) {
+            LOG.log(Level.FINEST, "LazyFind: rowKey={0}", rowKey);
+            result = dao.findById(Long.parseLong(rowKey));
+            rowDataCache.put(rowKey, result);
+        }
+        return result;
     }
     
     @Override  
