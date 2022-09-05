@@ -7,7 +7,7 @@ import com.nexten.nxfaces.dao.CriteriaGetter.PredicateGetter;
 import com.nexten.nxfaces.model.entity.Entity;
 import java.io.Serializable;
 import java.util.List;
-import javax.faces.model.DataModel;
+import jakarta.faces.model.DataModel;
 import org.primefaces.event.CloseEvent;
 
 /**

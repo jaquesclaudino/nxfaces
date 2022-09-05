@@ -8,7 +8,6 @@ import com.nexten.nxfaces.model.entity.Entity;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -16,17 +15,18 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.Attribute;
-import javax.persistence.metamodel.ManagedType;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Order;
+import jakarta.persistence.criteria.Path;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.metamodel.Attribute;
+import jakarta.persistence.metamodel.ManagedType;
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SelectableDataModel;
+import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
 /**
@@ -55,8 +55,8 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
     }
         
     @Override
-    public Object getRowKey(T entity) {
-        return entity.getId();
+    public String getRowKey(T entity) {
+        return Long.toString(entity.getId());
     }
 
     @Override
@@ -70,18 +70,28 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
         return result;
     }
     
-    @Override  
-    public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, FilterMeta> filters) {        
-        LOG.log(Level.FINEST, "LazyLoad: first={0}; pageSize={1}; sortField={2}; sortOrder={3}; filters={4}", new Object[] {first, pageSize, sortField, sortOrder, filters});
-                
-        if (!filters.toString().equals(lastFilters)) {
-            setRowCount(dao.findCount(getPredicateGetter(filters)).intValue());
-            lastFilters = filters.toString();
-        }        
-        return dao.findAll(getPredicateGetter(filters), getOrderGetter(sortField, sortOrder), first, pageSize);
+    @Override
+    public int count(Map<String, FilterMeta> filterBy) {
+        checkUpdateRowCount(filterBy);
+        return getRowCount();
+    }
+
+    @Override
+    public List<T> load(int first, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
+        LOG.log(Level.FINEST, "LazyLoad: first={0}; pageSize={1}; sortBy={2}; filterBy={3}", new Object[] {first, pageSize, sortBy, filterBy});                
+        checkUpdateRowCount(filterBy);
+        return dao.findAll(getPredicateGetter(filterBy), getOrderGetter(sortBy), first, pageSize);
     }
     
-    protected PredicateGetter getPredicateGetter(final Map<String, FilterMeta> filters) {      
+    private void checkUpdateRowCount(Map<String, FilterMeta> filterBy) {
+        if (!filterBy.toString().equals(lastFilters)) {
+            LOG.log(Level.FINEST, "LazyCount: filterBy={0}", filterBy);
+            setRowCount(dao.findCount(getPredicateGetter(filterBy)).intValue());
+            lastFilters = filterBy.toString();
+        }
+    }
+    
+    protected PredicateGetter getPredicateGetter(final Map<String, FilterMeta> filterBy) {      
         return new PredicateGetter() {
             @Override
             public Predicate getPredicate(CriteriaQuery query, CriteriaBuilder builder, Root root) {
@@ -90,8 +100,8 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
                 //predicados do filtro do dataTable:
                 Predicate predicateFilter = null;  
                 Predicate globalFilter = null;
-                if (filters != null) {
-                    for (Entry<String, FilterMeta> entry : filters.entrySet()) {
+                if (filterBy != null) {
+                    for (Entry<String, FilterMeta> entry : filterBy.entrySet()) {
                         if (entry.getKey().equals(GLOBAL_FILTER)) {
                             for (String attributeName : globalFilterAttributeNames) {
                                 Predicate p = createPredicate(builder, root, attributeName, entry.getValue().getFilterValue());
@@ -115,19 +125,23 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
         };
     }
     
-    protected OrderGetter getOrderGetter(String sortField, SortOrder sortOrder) {
-        if (sortField != null && !sortField.isEmpty()) {
+    protected OrderGetter getOrderGetter(Map<String, SortMeta> sortBy) {
+        if (sortBy != null && !sortBy.isEmpty()) {
             return new OrderGetter() {
                 @Override
                 public List getListOrder(CriteriaQuery query, CriteriaBuilder builder, Root root) {
-                    Path path = dao.getCriteriaGetter().getAttribute(root, sortField);
-                    Order order;
-                    if (SortOrder.DESCENDING.equals(sortOrder)) {
-                        order = builder.desc(path);
-                    } else {
-                        order = builder.asc(path);
+                    List<Order> result = new ArrayList<>();
+                    for (Entry<String, SortMeta> entry : sortBy.entrySet()) {
+                        Path path = dao.getCriteriaGetter().getAttribute(root, entry.getKey());
+                        Order order;
+                        if (SortOrder.DESCENDING.equals(entry.getValue().getOrder())) {
+                            order = builder.desc(path);
+                        } else {
+                            order = builder.asc(path);
+                        }
+                        result.add(order);
                     }
-                    return Arrays.asList(order);
+                    return result;
                 }
             };
         }
