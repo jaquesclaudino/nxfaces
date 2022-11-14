@@ -15,6 +15,7 @@ import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaDelete;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
@@ -81,9 +82,7 @@ public abstract class AbstractDAO<T> {
     }
     
     public void deleteAll() {
-        CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
-        CriteriaDelete<T> query = builder.createCriteriaDelete(getEntityClass());
-        getEntityManager().createQuery(query).executeUpdate();
+        getEntityManager().createQuery(createCriteriaDelete()).executeUpdate();
     }
     
     public void deleteAll(List<T> list) {
@@ -120,7 +119,7 @@ public abstract class AbstractDAO<T> {
      */
     //TODO: how to extract fieldClass of <F> ?
     protected <F> CriteriaQuery<F> createCriteriaQuery(SelectionGetter selectionGetter, PredicateGetter predicateGetter, OrderGetter orderGetter, Class fieldClass) {
-        CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
+        CriteriaBuilder builder = getBuilder();
         CriteriaQuery<F> query = builder.createQuery(fieldClass);
         Root<T> root = query.from(getEntityClass());
         
@@ -146,6 +145,18 @@ public abstract class AbstractDAO<T> {
     
     protected CriteriaQuery<T> createCriteriaQuery(PredicateGetter predicateGetter, OrderGetter orderGetter) {
         return createCriteriaQuery(criteriaGetter.getSelectionEntity(), predicateGetter, orderGetter);
+    }
+    
+    protected CriteriaUpdate<T> createCriteriaUpdate() {
+        return getBuilder().createCriteriaUpdate(getEntityClass());
+    }
+    
+    protected CriteriaDelete<T> createCriteriaDelete() {
+        return getBuilder().createCriteriaDelete(getEntityClass());
+    }
+    
+    protected CriteriaBuilder getBuilder() {
+        return getEntityManager().getCriteriaBuilder();
     }
         
     //---------- find list
