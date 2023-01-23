@@ -217,7 +217,7 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
                 result.add(attribute.getName());
             }
         }
-        LOG.log(Level.FINE, "Default globalFilter {0}: {1}", new Object[]{dao.getEntityClass().getSimpleName(), result});
+        LOG.log(Level.FINEST, "Default globalFilter {0}: {1}", new Object[]{dao.getEntityClass().getSimpleName(), result});
         return result;
     }
     
