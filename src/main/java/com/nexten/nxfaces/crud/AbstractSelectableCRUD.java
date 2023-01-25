@@ -23,6 +23,12 @@ public abstract class AbstractSelectableCRUD<T extends Entity> extends AbstractC
     }
     
     @Override
+    public void cancel() { 
+        super.cancel();  
+        clearList();
+    }
+    
+    @Override
     public void clearList() {
         super.clearList();
         selected = null;
