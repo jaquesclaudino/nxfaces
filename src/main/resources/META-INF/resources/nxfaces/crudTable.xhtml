@@ -16,11 +16,19 @@
         <cc:attribute name="paginator" default="true" type="Boolean"/>
         <cc:attribute name="paginatorAlwaysVisible" default="true" type="Boolean"/>
         <cc:attribute name="paginatorPosition" default="bottom" type="String"/>
+        <cc:attribute name="keyUpDelay" default="500" type="Integer"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         <!--Atencao: PF(widgetvar) nao funcionará se adicionar um panelGroup rendered=false aqui.-->
+        <script>
+            var delayTimer = 0;
+            function delayCall(callback, ms) {
+                clearTimeout(delayTimer);
+                delayTimer = setTimeout(callback, ms);
+            }
+        </script>
 
         <p:dataTable id="table" value="#{cc.attrs.mb.dataModel}" var="item" widgetVar="#{cc.attrs.widgetVar}"
                      selectionMode="single" selection="#{cc.attrs.mb.selected}"  
@@ -32,7 +40,7 @@
             <f:facet name="header">
                 <p:inputText id="globalFilter" 
                              value="#{cc.attrs.mb.globalFilter}"
-                             onkeyup="PF('#{cc.attrs.widgetVar}').filter()" 
+                             onkeyup="delayCall(function(){PF('#{cc.attrs.widgetVar}').filter();}, #{cc.attrs.keyUpDelay})" 
                              onkeypress="if (event.keyCode === 13) {return false;}"
                              rendered="#{cc.attrs.globalFilter}" 
                              placeholder="#{b.TypeToSearch}"/>
@@ -42,6 +50,6 @@
 
             <!-- COLUMN -->
             <cc:insertChildren/>
-        </p:dataTable>
+        </p:dataTable>            
     </cc:implementation>
 </html>

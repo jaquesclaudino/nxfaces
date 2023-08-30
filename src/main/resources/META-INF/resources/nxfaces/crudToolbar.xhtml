@@ -15,6 +15,7 @@
         <cc:attribute name="renderedSave" default="true" type="Boolean"/>
         <cc:attribute name="renderedDelete" default="true" type="Boolean"/>
         <cc:attribute name="renderedSticky" default="true" type="Boolean"/>
+        <cc:attribute name="renderedDefaultCommand" default="true" type="Boolean"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
@@ -26,7 +27,8 @@
                                             renderedBack="#{cc.attrs.renderedBack}"
                                             renderedNew="#{cc.attrs.renderedNew}"
                                             renderedSave="#{cc.attrs.renderedSave}"
-                                            renderedDelete="#{cc.attrs.renderedDelete}"/> 
+                                            renderedDelete="#{cc.attrs.renderedDelete}"
+                                            renderedDefaultCommand="#{cc.attrs.renderedDefaultCommand}"/> 
             </f:facet>
         </p:toolbar>
         
