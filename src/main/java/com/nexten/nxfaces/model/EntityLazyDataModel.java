@@ -40,8 +40,8 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
     private static final String GLOBAL_FILTER = "globalFilter";
     
     private final AbstractDAO<T> dao;
-    private final PredicateGetter predicateGetter;
-    private final OrderGetter orderGetter;
+    private PredicateGetter predicateGetter;
+    private OrderGetter orderGetter;
     private final List<String> globalFilterAttributeNames;
     private final Map<String,T> rowDataCache = new HashMap<>();
     private String lastFilters;
@@ -219,6 +219,14 @@ public class EntityLazyDataModel<T extends Entity> extends LazyDataModel<T> impl
         }
         LOG.log(Level.FINEST, "Default globalFilter {0}: {1}", new Object[]{dao.getEntityClass().getSimpleName(), result});
         return result;
+    }
+
+    public void setPredicateGetter(PredicateGetter predicateGetter) {
+        this.predicateGetter = predicateGetter;
+    }
+
+    public void setOrderGetter(OrderGetter orderGetter) {
+        this.orderGetter = orderGetter;
     }
     
 }
